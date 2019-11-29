@@ -38,7 +38,7 @@ public final class GameInputLoader {
             for (int i = 0; i < noPlayers; ++i) {
                 PlayerInput currPlayer = new PlayerInput();
                 currPlayer.type = fs.nextWord();
-                currPlayer.line = fs.nextInt();
+                currPlayer.row = fs.nextInt();
                 currPlayer.column = fs.nextInt();
                 players.add(currPlayer);
             }

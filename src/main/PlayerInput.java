@@ -2,6 +2,18 @@ package main;
 
 public class PlayerInput {
     String type;
-    int line;
+    int row;
     int column;
+
+    public String getType() {
+        return type;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getColumn() {
+        return column;
+    }
 }
