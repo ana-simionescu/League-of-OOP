@@ -1,6 +1,7 @@
 package characters;
 
 import map.Map;
+import map.Terrain;
 
 import java.util.List;
 
@@ -16,12 +17,13 @@ public abstract class Hero {
    protected int row;
    protected int column;
    protected int hp;
-   protected int maxHP;
+   protected float maxHP;
    protected int xp;
    protected int level;
    protected boolean movingAbility;
    protected int overtimeDmgTimer;
    protected int overtimeDmg;
+   protected int dmg;
    Map map = Map.getInstance();
 
    public Hero(int row, int column) {
@@ -29,13 +31,14 @@ public abstract class Hero {
       this.column = column;
       map.putPlayerOnMap(row, column, this);
       hp = 0;
-      maxHP = 0;
+      maxHP = 0f;
       type = '-';
       xp = 0;
       level = 0;
       movingAbility = true;
       overtimeDmgTimer = 0;
       overtimeDmg = 0;
+      dmg = 0;
    }
    public String toString() {
       return type + " " + level + " " + xp + " " + hp + " " + row + " " + column;
@@ -43,6 +46,29 @@ public abstract class Hero {
 
    public int getLevel() {
       return level;
+   }
+
+   public void sufferOvertimeDmg() {
+      if (overtimeDmgTimer > 0) {
+         hp -= overtimeDmg;
+         overtimeDmgTimer--;
+         if (overtimeDmgTimer == 0 && movingAbility == false) {
+            movingAbility = true;
+         }
+      }
+      die();
+   }
+
+   public void sufferDmg() {
+      hp -= dmg;
+      die();
+   }
+
+   public void die() {
+      if ( hp < 0 || dmg == -1) {
+         hp = -1;
+         map.removePlayerFromMap(row, column, this);
+      }
    }
 
    public void move(char direction) {
@@ -71,10 +97,10 @@ public abstract class Hero {
       }
    }
 
-   public abstract void isAttackedBy(Hero player);
-   public abstract void attack(Knight knight);
-   public abstract void attack(Pyromancer pyromancer);
-   public abstract void attack(Rogue rogue);
-   public abstract void attack(Wizard wizard);
+   public abstract void isAttackedBy(Hero player, Terrain terrain);
+   public abstract void attack(Knight knight, Terrain terrain);
+   public abstract void attack(Pyromancer pyromancer, Terrain terrain);
+   public abstract void attack(Rogue rogue, Terrain terrain);
+   public abstract void attack(Wizard wizard, Terrain terrain);
 
 }
