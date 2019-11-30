@@ -26,10 +26,10 @@ public class Main {
        //
        /* for(int i = 0; i < gameInput.getMapRows(); i++) {
             for(int j = 0; j < gameInput.getMapColumns(); j++) {
-                 System.out.println(map.getCell(i,j).getType());
+                 System.out.println(map.getCellType(i,j).getType());
             }
-        }
-        */
+        }*/
+
         // System.out.println(map.getCell(0,0).getType());
 
 
