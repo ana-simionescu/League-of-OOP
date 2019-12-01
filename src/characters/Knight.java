@@ -8,40 +8,52 @@ import static java.lang.Math.round;
 
 public class Knight extends Hero {
 
-    float execute;
-    float executeHPLimit;
-    float slam;
+    private float execute;
+    private float executeHPLimit;
+    private float slam;
 
-    public Knight(int row, int column) {
+    public Knight(final int row, final int column) {
         super(row, column);
         hp = Constants.KNIGHT_HP;
         maxHP = Constants.KNIGHT_HP;
         type = 'K';
-        execute = 200;
-        executeHPLimit = 20;
-        slam = 100;
+        execute = Constants.EXECUTE;
+        executeHPLimit = Constants.EXECUTE_HP_START;
+        slam = Constants.SLAM;
     }
 
-    public float calculateDmg (float baseDmg, Terrain terrain) {
+    public final float calculateDmg(final float baseDmg, final Terrain terrain) {
         if (terrain.getType() == 'L') {
-            return baseDmg * 1.15f;
+            return baseDmg * Constants.LAND_MODIFIER;
         }
         return baseDmg;
     }
 
+    public final float getSlam() {
+        return slam;
+    }
+
+    public final float getExecuteHPLimit() {
+        return executeHPLimit;
+    }
+
+    public final float getExecute() {
+        return execute;
+    }
+
     @Override
-    public void isAttackedBy(Hero player, Terrain terrain) {
+    public final void isAttackedBy(final Hero player, final Terrain terrain) {
         player.attack(this, terrain);
     }
 
     @Override
-    public void attack(Knight knight, Terrain terrain) {
-        float victimHpLimit = executeHPLimit / 100f * knight.maxHP;
+    public final void attack(final Knight knight, final Terrain terrain) {
+        float victimHpLimit = executeHPLimit / Constants.PERCENT * knight.maxHP;
         if (knight.hp < victimHpLimit) {
             knight.dmg = -1;
         } else {
             float dmgExecute = calculateDmg(execute, terrain);
-            float dmgSlam = calculateDmg(slam, terrain) * 1.2f;
+            float dmgSlam = calculateDmg(slam, terrain) * Constants.SLAM_K_MODIFIER;
             int totalDmg = round(dmgExecute) + round(dmgSlam);
             knight.dmg = totalDmg;
             knight.overtimeDmgTimer = 1;
@@ -51,13 +63,13 @@ public class Knight extends Hero {
     }
 
     @Override
-    public void attack(Pyromancer pyromancer, Terrain terrain) {
-        float victimHpLimit = executeHPLimit / 100f * pyromancer.maxHP;
+    public final void attack(final Pyromancer pyromancer, final Terrain terrain) {
+        float victimHpLimit = executeHPLimit / Constants.PERCENT * pyromancer.maxHP;
         if (pyromancer.hp < victimHpLimit) {
             pyromancer.dmg = -1;
         } else {
-            float dmgExecute = calculateDmg(execute, terrain) * 1.1f;
-            float dmgSlam = calculateDmg(slam, terrain) * 0.9f;
+            float dmgExecute = calculateDmg(execute, terrain) * Constants.EXECUTE_P_MODIFIER;
+            float dmgSlam = calculateDmg(slam, terrain) * Constants.SLAM_P_MODIFIER;
             int totalDmg = round(dmgExecute) + round(dmgSlam);
             pyromancer.dmg = totalDmg;
             pyromancer.overtimeDmgTimer = 1;
@@ -67,13 +79,13 @@ public class Knight extends Hero {
     }
 
     @Override
-    public void attack(Rogue rogue, Terrain terrain) {
-        float victimHpLimit = executeHPLimit / 100f * rogue.maxHP;
+    public final void attack(final Rogue rogue, final Terrain terrain) {
+        float victimHpLimit = executeHPLimit / Constants.PERCENT * rogue.maxHP;
         if (rogue.hp < victimHpLimit) {
             rogue.dmg = -1;
         } else {
-            float dmgExecute = calculateDmg(execute, terrain) * 1.15f;
-            float dmgSlam = calculateDmg(slam, terrain) * 0.8f;
+            float dmgExecute = calculateDmg(execute, terrain) * Constants.EXECUTE_R_MODIFIER;
+            float dmgSlam = calculateDmg(slam, terrain) * Constants.SLAM_R_MODIFIER;
             int totalDmg = round(dmgExecute) + round(dmgSlam);
             rogue.dmg = totalDmg;
             rogue.overtimeDmgTimer = 1;
@@ -83,13 +95,13 @@ public class Knight extends Hero {
     }
 
     @Override
-    public void attack(Wizard wizard, Terrain terrain) {
-        float victimHpLimit = executeHPLimit / 100f * wizard.maxHP;
+    public final void attack(final Wizard wizard, final Terrain terrain) {
+        float victimHpLimit = executeHPLimit / Constants.PERCENT * wizard.maxHP;
         if (wizard.hp < victimHpLimit) {
             wizard.dmg = -1;
         } else {
-            float dmgExecute = calculateDmg(execute, terrain) * 0.8f;
-            float dmgSlam = calculateDmg(slam, terrain) * 1.05f;
+            float dmgExecute = calculateDmg(execute, terrain) * Constants.EXECUTE_W_MODIFIER;
+            float dmgSlam = calculateDmg(slam, terrain) * Constants.SLAM_W_MODIFIER;
             int totalDmg = round(dmgExecute) + round(dmgSlam);
             wizard.dmg = totalDmg;
             wizard.overtimeDmgTimer = 1;
@@ -99,12 +111,15 @@ public class Knight extends Hero {
     }
 
     @Override
-    public void levelUp() {
-        super.levelUp();
-        hp = Constants.KNIGHT_HP + 80 * level;
-        maxHP = Constants.KNIGHT_HP + 80 * level;
-        execute = 200 + level * 30;
-        executeHPLimit = min(40, 20 + level);
-        slam = 100 + 40 * level;
+    public final void levelUp() {
+        if (xp >= Constants.LEVEL_UP_LIMIT + level * Constants.LEVEL_UP) {
+            level++;
+            hp = Constants.KNIGHT_HP + Constants.K_HP_LEVEL * level;
+            maxHP = Constants.KNIGHT_HP + Constants.K_HP_LEVEL * level;
+            execute = Constants.EXECUTE + level * Constants.K_EXECUTE_LEVEL;
+            executeHPLimit = min(Constants.EXECUTE_HP_LIMIT, Constants.EXECUTE_HP_LIMIT + level);
+            slam = Constants.SLAM + Constants.SLAM_LEVEL * level;
+            levelUp();
+        }
     }
 }

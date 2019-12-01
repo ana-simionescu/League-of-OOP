@@ -1,7 +1,5 @@
 package map;
 
-import characters.*;
-
 final class TerrainFactory {
     private static TerrainFactory instance = null;
 

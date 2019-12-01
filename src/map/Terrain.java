@@ -1,9 +1,12 @@
 package map;
 
 public class Terrain {
-    char type;
+    private char type;
 
-    public char getType() {
+    public final char getType() {
         return type;
+    }
+    public final void setType(char type) {
+        this.type = type;
     }
 }

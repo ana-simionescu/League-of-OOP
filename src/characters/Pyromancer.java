@@ -7,82 +7,103 @@ import static java.lang.Math.round;
 
 public class Pyromancer extends Hero {
 
-    float fireblast;
-    float ignite;
-    float igniteOverTime;
+    private float fireblast;
+    private float ignite;
+    private float igniteOverTime;
 
-    public Pyromancer(int row, int column) {
+    public Pyromancer(final int row, final int column) {
         super(row, column);
         hp = Constants.PYROMANCER_HP;
         maxHP = Constants.PYROMANCER_HP;
         type = 'P';
-        fireblast = 350;
-        ignite = 150;
-        igniteOverTime = 50;
+        fireblast = Constants.FIREBLAST;
+        ignite = Constants.IGNITE;
+        igniteOverTime = Constants.IGNITE_OVERTIME;
     }
 
-    public float calculateDmg (float baseDmg, Terrain terrain) {
+    public final float calculateDmg(final float baseDmg, final Terrain terrain) {
         if (terrain.getType() == 'V') {
-            return baseDmg * 1.25f;
+            return baseDmg * Constants.VOLCANIC_MODIFIER;
         }
         return baseDmg;
     }
 
+    public final float getFireblast() {
+        return fireblast;
+    }
+
+    public final float getIgnite() {
+        return ignite;
+    }
+
     @Override
-    public void isAttackedBy(Hero player, Terrain terrain) {
+    public final void isAttackedBy(final Hero player, final Terrain terrain) {
         player.attack(this, terrain);
     }
 
     @Override
-    public void attack(Knight knight, Terrain terrain) {
-        float dmgFireblast = calculateDmg(fireblast, terrain) * 1.2f;
-        float dmgIgnite = calculateDmg(ignite, terrain) * 1.2f;
-        float dmgIgniteOverTime = calculateDmg(igniteOverTime, terrain) * 1.2f;
+    public final void attack(final Knight knight, final Terrain terrain) {
+        float dmgFireblast = calculateDmg(fireblast, terrain) * Constants.FIREBLAST_K_MODIFIER;
+        float dmgIgnite = calculateDmg(ignite, terrain) * Constants.IGNITE_K_MODIFIER;
+        float dmgIgniteOverTime = calculateDmg(igniteOverTime, terrain)
+                * Constants.IGNITEOVERTIME_K_MODIFIER;
         int totalDmg = round(dmgFireblast) + round(dmgIgnite);
         knight.dmg = totalDmg;
         knight.overtimeDmgTimer = 2;
+        knight.movingAbility = true;
         knight.overtimeDmg = round(dmgIgniteOverTime);
     }
 
     @Override
-    public void attack(Pyromancer pyromancer, Terrain terrain) {
-        float dmgFireblast = calculateDmg(fireblast, terrain) * 0.9f;
-        float dmgIgnite = calculateDmg(ignite, terrain) * 0.9f;
-        float dmgIgniteOverTime = calculateDmg(igniteOverTime, terrain) * 0.9f;
+    public final void attack(final Pyromancer pyromancer, final Terrain terrain) {
+        float dmgFireblast = calculateDmg(fireblast, terrain) * Constants.FIREBLAST_P_MODIFIER;
+        float dmgIgnite = calculateDmg(ignite, terrain) * Constants.IGNITE_P_MODIFIER;
+        float dmgIgniteOverTime = calculateDmg(igniteOverTime, terrain)
+                * Constants.IGNITEOVERTIME_P_MODIFIER;
         int totalDmg = round(dmgFireblast) + round(dmgIgnite);
         pyromancer.dmg = totalDmg;
         pyromancer.overtimeDmgTimer = 2;
+        pyromancer.movingAbility = true;
         pyromancer.overtimeDmg = round(dmgIgniteOverTime);
     }
 
     @Override
-    public void attack(Rogue rogue, Terrain terrain) {
-        float dmgFireblast = calculateDmg(fireblast, terrain) * 0.8f;
-        float dmgIgnite = calculateDmg(ignite, terrain) * 0.8f;
-        float dmgIgniteOverTime = calculateDmg(igniteOverTime, terrain) * 0.8f;
+    public final void attack(final Rogue rogue, final Terrain terrain) {
+        float dmgFireblast = calculateDmg(fireblast, terrain) * Constants.FIREBLAST_R_MODIFIER;
+        float dmgIgnite = calculateDmg(ignite, terrain) * Constants.IGNITE_R_MODIFIER;
+        float dmgIgniteOverTime = calculateDmg(igniteOverTime, terrain)
+                * Constants.IGNITEOVERTIME_R_MODIFIER;
         int totalDmg = round(dmgFireblast) + round(dmgIgnite);
+        //System.out.println(totalDmg);
         rogue.dmg = totalDmg;
         rogue.overtimeDmgTimer = 2;
+        rogue.movingAbility = true;
         rogue.overtimeDmg = round(dmgIgniteOverTime);
     }
 
     @Override
-    public void attack(Wizard wizard, Terrain terrain) {
-        float dmgFireblast = calculateDmg(fireblast, terrain) * 1.05f;
-        float dmgIgnite = calculateDmg(ignite, terrain) * 1.05f;
-        float dmgIgniteOverTime = calculateDmg(igniteOverTime, terrain) * 1.05f;
+    public final void attack(final Wizard wizard, final Terrain terrain) {
+        float dmgFireblast = calculateDmg(fireblast, terrain) * Constants.FIREBLAST_W_MODIFIER;
+        float dmgIgnite = calculateDmg(ignite, terrain) * Constants.IGNITE_W_MODIFIER;
+        float dmgIgniteOverTime = calculateDmg(igniteOverTime, terrain)
+                * Constants.IGNITEOVERTIME_W_MODIFIER;
         int totalDmg = round(dmgFireblast) + round(dmgIgnite);
         wizard.dmg = totalDmg;
+        wizard.movingAbility = true;
         wizard.overtimeDmgTimer = 2;
         wizard.overtimeDmg = round(dmgIgniteOverTime);
     }
+
     @Override
-    public void levelUp() {
-        super.levelUp();
-        hp = Constants.PYROMANCER_HP + 50 * level;
-        maxHP = Constants.PYROMANCER_HP + 50 * level;
-        fireblast = 350 + level * 50;
-        ignite = 150 + level * 20;
-        igniteOverTime = 50 + level * 30;
+    public final void levelUp() {
+        if (xp >= Constants.LEVEL_UP_LIMIT + level * Constants.LEVEL_UP) {
+            level++;
+            hp = Constants.PYROMANCER_HP + Constants.P_HP_LEVEL * level;
+            maxHP = Constants.PYROMANCER_HP + Constants.P_HP_LEVEL * level;
+            fireblast = Constants.FIREBLAST + level * Constants.FIREBLAST_LEVEL;
+            ignite = Constants.IGNITE + level * Constants.IGNITE_LEVEL;
+            igniteOverTime = Constants.IGNITE_OVERTIME + level * Constants.IGNITEOVERTIME_LEVEL;
+            levelUp();
+        }
     }
 }

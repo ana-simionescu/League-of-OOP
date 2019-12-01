@@ -22,7 +22,8 @@ public class GameInput {
     }
 
     public GameInput(final int rows, final int columns, final int noPlayers, final int rounds,
-                     final List<String> map, final List<String> moves, final List<PlayerInput> players) {
+                     final List<String> map, final List<String> moves,
+                     final List<PlayerInput> players) {
         mapRows = rows;
         mapColumns = columns;
         this.noPlayers = noPlayers;
@@ -40,17 +41,25 @@ public class GameInput {
         return playerMoves;
     }
 
-    public final List<PlayerInput> getPlayers() { return players;}
+    public final List<PlayerInput> getPlayers() {
+        return players;
+    }
 
     public final int getNoPlayers() {
         return noPlayers;
     }
 
-    public final int getNoRounds() { return noRounds;}
+    public final int getNoRounds() {
+        return noRounds;
+    }
 
-    public final int getMapRows() { return mapRows;}
+    public final int getMapRows() {
+        return mapRows;
+    }
 
-    public final int getMapColumns() { return mapColumns;}
+    public final int getMapColumns() {
+        return mapColumns;
+    }
 
     public final boolean isValidInput() {
         boolean membersInstantiated = map != null && playerMoves != null && players != null;

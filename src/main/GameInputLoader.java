@@ -2,6 +2,8 @@ package main;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import characters.Hero;
 import fileio.FileSystem;
 
 public final class GameInputLoader {
@@ -13,6 +15,21 @@ public final class GameInputLoader {
         mOutputPath = outputPath;
     }
 
+
+    public void write(final List<Hero> players) {
+        try {
+            FileSystem fs = new FileSystem(mInputPath, mOutputPath);
+            for (int i = 0; i < players.size(); i++) {
+                fs.writeWord(players.get(i).toString());
+                fs.writeNewLine();
+            }
+            fs.close();
+
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+
+    }
 
     public GameInput load() {
         int mapRows = 0;
@@ -37,9 +54,9 @@ public final class GameInputLoader {
 
             for (int i = 0; i < noPlayers; ++i) {
                 PlayerInput currPlayer = new PlayerInput();
-                currPlayer.type = fs.nextWord();
-                currPlayer.row = fs.nextInt();
-                currPlayer.column = fs.nextInt();
+                currPlayer.setType(fs.nextWord());
+                currPlayer.setRow(fs.nextInt());
+                currPlayer.setColumn(fs.nextInt());
                 players.add(currPlayer);
             }
 

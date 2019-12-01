@@ -3,12 +3,14 @@ package main;
 import characters.Hero;
 import characters.HeroFactory;
 import map.Map;
-import map.Terrain;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main {
+public final class Main {
+    private Main() {
+    }
+
     public static void main(final String[] args) {
         GameInputLoader gameInputLoader = new GameInputLoader(args[0], args[1]);
         GameInput gameInput = gameInputLoader.load();
@@ -17,49 +19,60 @@ public class Main {
         HeroFactory heroFactory = HeroFactory.getInstance();
 
         List<Hero> players = new ArrayList<>();
-        List<String> moves = new ArrayList<>();
-        moves = gameInput.getPlayerMoves();
-        for (int i = 0 ; i < gameInput.getNoPlayers(); i++) {
+        List<String> moves = gameInput.getPlayerMoves();
+        for (int i = 0; i < gameInput.getNoPlayers(); i++) {
             players.add(heroFactory.createHero(gameInput.getPlayers().get(i)));
-         //   System.out.println(players.get(i));
         }
-       //
-       /* for(int i = 0; i < gameInput.getMapRows(); i++) {
-            for(int j = 0; j < gameInput.getMapColumns(); j++) {
-                 System.out.println(map.getCellType(i,j).getType());
+
+        for (int k = 0; k < gameInput.getNoRounds(); k++) {
+            String currMove = moves.get(k);
+            for (int j = 0; j < currMove.length(); j++) {
+                if (players.get(j).isMovingAbility() && players.get(j).isAlive()) {
+                    players.get(j).move(currMove.charAt(j));
+                }
+                players.get(j).sufferOvertimeDmg();
             }
-        }*/
+            for (int i = 0; i < gameInput.getMapRows(); i++) {
+                for (int j = 0; j < gameInput.getMapColumns(); j++) {
+                    int row = i;
+                    int column = j;
+                    if (map.checkIfFightTime(row, column)) {
+                        Hero firstFighter = map.firstFighter(row, column);
+                        Hero secondFighter = map.secondFighter(row, column);
+                        if (firstFighter.getType() != 'W') {
+                                secondFighter.isAttackedBy(firstFighter,
+                                        map.getCellType(row, column));
+                                firstFighter.isAttackedBy(secondFighter,
+                                        map.getCellType(row, column));
+                                secondFighter.sufferDmg();
+                                firstFighter.sufferDmg();
+                                if (firstFighter.getHp() == -1 && secondFighter.getHp() != -1) {
+                                    secondFighter.growXP(firstFighter);
+                                }
+                                if (secondFighter.getHp() == -1 && firstFighter.getHp() != -1) {
+                                    firstFighter.growXP(secondFighter);
+                                }
 
-        // System.out.println(map.getCell(0,0).getType());
+                        } else {
+                                firstFighter.isAttackedBy(secondFighter,
+                                        map.getCellType(row, column));
+                                secondFighter.isAttackedBy(firstFighter,
+                                        map.getCellType(row, column));
+                                secondFighter.sufferDmg();
+                                firstFighter.sufferDmg();
+                                if (firstFighter.getHp() == -1 && secondFighter.getHp() != -1) {
+                                    secondFighter.growXP(firstFighter);
+                                }
+                                if (secondFighter.getHp() == -1 && firstFighter.getHp() != -1) {
+                                    firstFighter.growXP(secondFighter);
+                                }
+                        }
+                    }
+                }
 
-
-
-       /* System.out.println(gameInput.getNoPlayers());
-        System.out.println(gameInput.getNoRounds());
-
-
-        List<String> map = new ArrayList<>();
-        List<PlayerInput> players = new ArrayList<>();
-        List<String> playerMoves = new ArrayList<>();
-
-        map = gameInput.getMap();
-        players = gameInput.getPlayers();
-        playerMoves = gameInput.getPlayerMoves();
-
-        for (int i = 0; i < map.size(); i++) {
-            System.out.println(map.get(i));
+            }
         }
-        for (int i = 0; i < players.size(); i++) {
-            System.out.println(players.get(i).type);
-            System.out.println(players.get(i).line);
-            System.out.println(players.get(i).column);
-        }
-        for (int i = 0; i < playerMoves.size(); i++) {
-            System.out.println(playerMoves.get(i));
-        }*/
-
-
-
+        gameInputLoader.write(players);
 
     }
 }
