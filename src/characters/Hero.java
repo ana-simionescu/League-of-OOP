@@ -67,6 +67,15 @@ public abstract class Hero {
       return type;
    }
 
+   /*
+      În variabila overtimeDmgTimer rețin câte runde va mai fi afectat.
+      În variabila overtimeDmg rețin dmg-ul overtime pe care îl primește.
+      movingAbility reține dacă jucătorul este incapacitat la momentul curent
+      La începutul fiecărei runde este apelată metoda sufferOvertimeDmg în care
+   hp-ul este afectat de dmg si timerul este decrementat. Dacă perioada de
+   overtime dmg s-a terminat, movingAbility devine true deci jucătorul se va
+   putea mișca la următoarea rundă.
+    */
    public final void sufferOvertimeDmg() {
       if (overtimeDmgTimer > 0) {
          hp -= overtimeDmg;
@@ -83,6 +92,12 @@ public abstract class Hero {
       die();
    }
 
+   /*
+      Dacă hp-ul jucătorului a devenit 0 sau negativ, îl setez la -1
+   pentru a ști că este mort și îl scot de pe hartă.
+      Această metodă este apelată de fiecare dată când un jucator
+   este afectat de dmg instantaneu sau overtime.
+    */
    public final void die() {
       if (hp <= 0 || dmg == -1) {
          hp = -1;
@@ -108,6 +123,11 @@ public abstract class Hero {
    }
 
    public abstract void levelUp();
+
+   /*
+      Metoda primește dmg-ul de bază al abilității și îi aplică modificatorul de teren
+    */
+   public abstract float calculateDmg(float baseDmg, Terrain terrain);
 
    public abstract void isAttackedBy(Hero player, Terrain terrain);
    public abstract void attack(Knight knight, Terrain terrain);

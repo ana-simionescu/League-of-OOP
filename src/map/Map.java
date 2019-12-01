@@ -31,18 +31,6 @@ public final class Map {
         return fieldMap.get(row).get(column);
     }
 
-    public List<List<List<Hero>>> getPlayersMap() {
-        return playersMap;
-    }
-
-    public List<List<Terrain>> getFieldMap() {
-        return fieldMap;
-    }
-
-    public TerrainFactory getTerrainFactory() {
-        return terrainFactory;
-    }
-
     private Map() { }
 
     public static Map getInstance(final List<String> mapInput) {
@@ -57,6 +45,11 @@ public final class Map {
         }
         return instance;
     }
+
+    /*
+    Metodele primesc ca parametrii coordonatele si jucătorul pe care
+    trebuie să îl așeze sau scoată de pe hartă
+     */
     public void putPlayerOnMap(final int row, final int column, final Hero player) {
         playersMap.get(row).get(column).add(player);
     }
@@ -64,6 +57,9 @@ public final class Map {
         playersMap.get(row).get(column).remove(player);
     }
 
+    /*
+    Dacă se găsesc 2 jucători în aceeași căsuță aceștia se vor lupta
+     */
     public boolean checkIfFightTime(final int row, final int column) {
         if (playersMap.get(row).get(column).size() == 2) {
             return true;
