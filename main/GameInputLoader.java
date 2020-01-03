@@ -1,10 +1,10 @@
 package main;
 
+import characters.heroes.Hero;
+import fileio.FileSystem;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import characters.Hero;
-import fileio.FileSystem;
 
 public final class GameInputLoader {
     private final String mInputPath;
@@ -16,7 +16,7 @@ public final class GameInputLoader {
     }
 
 
-    public void write(List<Hero> players) {
+    public void write(final List<Hero> players) {
         try {
             FileSystem fs = new FileSystem(mInputPath, mOutputPath);
             for (int i = 0; i < players.size(); i++) {
@@ -39,6 +39,8 @@ public final class GameInputLoader {
         List<String> map = new ArrayList<>();
         List<PlayerInput> players = new ArrayList<>();
         List<String> playerMoves = new ArrayList<>();
+        List<List<AngelInput>> angels= new ArrayList<>();
+
 
         try {
             FileSystem fs = new FileSystem(mInputPath, mOutputPath);
@@ -54,9 +56,9 @@ public final class GameInputLoader {
 
             for (int i = 0; i < noPlayers; ++i) {
                 PlayerInput currPlayer = new PlayerInput();
-                currPlayer.type = fs.nextWord();
-                currPlayer.row = fs.nextInt();
-                currPlayer.column = fs.nextInt();
+                currPlayer.setType(fs.nextWord());
+                currPlayer.setRow(fs.nextInt());
+                currPlayer.setColumn(fs.nextInt());
                 players.add(currPlayer);
             }
 
@@ -64,13 +66,30 @@ public final class GameInputLoader {
             for (int i = 0; i < noRounds; ++i) {
                 playerMoves.add(fs.nextWord());
             }
+            for (int i = 0; i < noRounds; i++) {
+                angels.add(new ArrayList<>());
+            }
+
+            for (int i = 0; i < noRounds; ++i) {
+                int noAngels = fs.nextInt();
+                for (int j = 0; j < noAngels; j++) {
+                    String Angel = fs.nextWord();
+                    AngelInput currAngel = new AngelInput();
+                    String[] Angelstr = Angel.split(",");
+                    currAngel.setType(Angelstr[0]);
+                    currAngel.setRow(Angelstr[1].charAt(0) - '0');
+                    currAngel.setColumn(Angelstr[2].charAt(0) - '0');
+                    angels.get(i).add(currAngel);
+                }
+            }
+
             fs.close();
 
         } catch (Exception e1) {
             e1.printStackTrace();
         }
 
-        return new GameInput(mapRows, mapColumns, noPlayers, noRounds, map, playerMoves, players);
+        return new GameInput(mapRows, mapColumns, noPlayers, noRounds, map, playerMoves, players, angels);
     }
 }
 

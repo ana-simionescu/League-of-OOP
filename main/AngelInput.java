@@ -1,6 +1,6 @@
 package main;
 
-public final class PlayerInput {
+public final class AngelInput {
     private String type;
     private int row;
     private int column;
