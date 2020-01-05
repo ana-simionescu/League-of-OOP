@@ -12,8 +12,8 @@ public class Pyromancer extends Hero {
     private float ignite;
     private float igniteOverTime;
 
-    public Pyromancer(final int row, final int column) {
-        super(row, column);
+    public Pyromancer(final int row, final int column, final int index) {
+        super(row, column, index);
         hp = Constants.PYROMANCER_HP;
         maxHP = Constants.PYROMANCER_HP;
         type = 'P';
@@ -46,10 +46,14 @@ public class Pyromancer extends Hero {
     public final void isAffectedBy(final Angel angel) { angel.affect(this); }
 
     @Override
+    public final String toStringName() {
+        return "Pyromancer " + index;
+    }
+    @Override
     public final void attack(final Knight knight, final Terrain terrain) {
-        float dmgFireblast = calculateDmg(fireblast, terrain) * Constants.FIREBLAST_K_MODIFIER;
-        float dmgIgnite = calculateDmg(ignite, terrain) * Constants.IGNITE_K_MODIFIER;
-        float dmgIgniteOverTime = calculateDmg(igniteOverTime, terrain)
+        float dmgFireblast = round(calculateDmg(fireblast, terrain)) * (Constants.FIREBLAST_K_MODIFIER + angelInfluence);
+        float dmgIgnite = round(calculateDmg(ignite, terrain)) * (Constants.IGNITE_K_MODIFIER + angelInfluence);
+        float dmgIgniteOverTime = round(calculateDmg(igniteOverTime, terrain))
                 * Constants.IGNITEOVERTIME_K_MODIFIER;
         int totalDmg = round(dmgFireblast) + round(dmgIgnite);
         knight.dmg = totalDmg;
@@ -60,9 +64,9 @@ public class Pyromancer extends Hero {
 
     @Override
     public final void attack(final Pyromancer pyromancer, final Terrain terrain) {
-        float dmgFireblast = calculateDmg(fireblast, terrain) * Constants.FIREBLAST_P_MODIFIER;
-        float dmgIgnite = calculateDmg(ignite, terrain) * Constants.IGNITE_P_MODIFIER;
-        float dmgIgniteOverTime = calculateDmg(igniteOverTime, terrain)
+        float dmgFireblast = round(calculateDmg(fireblast, terrain)) * (Constants.FIREBLAST_P_MODIFIER + angelInfluence);
+        float dmgIgnite = round(calculateDmg(ignite, terrain)) * (Constants.IGNITE_P_MODIFIER + angelInfluence);
+        float dmgIgniteOverTime = round(calculateDmg(igniteOverTime, terrain))
                 * Constants.IGNITEOVERTIME_P_MODIFIER;
         int totalDmg = round(dmgFireblast) + round(dmgIgnite);
         pyromancer.dmg = totalDmg;
@@ -73,9 +77,9 @@ public class Pyromancer extends Hero {
 
     @Override
     public final void attack(final Rogue rogue, final Terrain terrain) {
-        float dmgFireblast = calculateDmg(fireblast, terrain) * Constants.FIREBLAST_R_MODIFIER;
-        float dmgIgnite = calculateDmg(ignite, terrain) * Constants.IGNITE_R_MODIFIER;
-        float dmgIgniteOverTime = calculateDmg(igniteOverTime, terrain)
+        float dmgFireblast = round(calculateDmg(fireblast, terrain)) * (Constants.FIREBLAST_R_MODIFIER + angelInfluence);
+        float dmgIgnite = round(calculateDmg(ignite, terrain)) * (Constants.IGNITE_R_MODIFIER + angelInfluence);
+        float dmgIgniteOverTime = round(calculateDmg(igniteOverTime, terrain))
                 * Constants.IGNITEOVERTIME_R_MODIFIER;
         int totalDmg = round(dmgFireblast) + round(dmgIgnite);
         //System.out.println(totalDmg);
@@ -87,9 +91,9 @@ public class Pyromancer extends Hero {
 
     @Override
     public final void attack(final Wizard wizard, final Terrain terrain) {
-        float dmgFireblast = calculateDmg(fireblast, terrain) * Constants.FIREBLAST_W_MODIFIER;
-        float dmgIgnite = calculateDmg(ignite, terrain) * Constants.IGNITE_W_MODIFIER;
-        float dmgIgniteOverTime = calculateDmg(igniteOverTime, terrain)
+        float dmgFireblast = round(calculateDmg(fireblast, terrain)) * (Constants.FIREBLAST_W_MODIFIER + angelInfluence);
+        float dmgIgnite = round(calculateDmg(ignite, terrain)) * (Constants.IGNITE_W_MODIFIER + angelInfluence);
+        float dmgIgniteOverTime = round(calculateDmg(igniteOverTime, terrain))
                 * Constants.IGNITEOVERTIME_W_MODIFIER;
         int totalDmg = round(dmgFireblast) + round(dmgIgnite);
         wizard.dmg = totalDmg;
@@ -115,6 +119,7 @@ public class Pyromancer extends Hero {
     @Override
     public final void levelUpByAngel() {
         level++;
+        xp = 200 + level * 50;
         hp = Constants.PYROMANCER_HP + Constants.P_HP_LEVEL * level;
         maxHP = Constants.PYROMANCER_HP + Constants.P_HP_LEVEL * level;
         fireblast = Constants.FIREBLAST + level * Constants.FIREBLAST_LEVEL;

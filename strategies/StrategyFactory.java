@@ -18,46 +18,47 @@ public class StrategyFactory {
             if (player.getType() == 'K') {
                if(player.getMaxHP() / 3 < player.getHp() && player.getHp() < player.getMaxHP() / 2
                                             && player.isMovingAbility()) {
-                   return new KnightOffensive(Hero player);
+                   return new KnightOffensive(player);
                }
                 if(player.getMaxHP() / 3 > player.getHp() && player.isMovingAbility()) {
-                    return new KnightDefensive(Hero player);
+                    return new KnightDefensive(player);
                 }
-                return new Basic(Hero player);
+                return new Basic(player);
             }
 
             if (player.getType() == 'P') {
                 if(player.getMaxHP() / 4 < player.getHp() && player.getHp() < player.getMaxHP() / 3
                         && player.isMovingAbility()) {
-                    return new PyromancerOffensive(Hero player);
+                    return new PyromancerOffensive(player);
                 }
                 if(player.getMaxHP() / 4 > player.getHp() && player.isMovingAbility()) {
-                    return new PyromancerDefensive(Hero player);
+                    return new PyromancerDefensive(player);
                 }
-                return new Basic(Hero player);
+                return new Basic(player);
             }
 
             if (player.getType() == 'R') {
                 if(player.getMaxHP() / 7 < player.getHp() && player.getHp() < player.getMaxHP() / 5
                         && player.isMovingAbility()) {
-                    return new RogueOffensive(Hero player);
+                    return new RogueOffensive(player);
                 }
                 if(player.getMaxHP() / 7 > player.getHp() && player.isMovingAbility()) {
-                    return new RogueDefensive(Hero player);
+                    return new RogueDefensive(player);
                 }
-                return new Basic(Hero player);
+                return new Basic(player);
             }
 
             if (player.getType() == 'W') {
                 if(player.getMaxHP() / 4 < player.getHp() && player.getHp() < player.getMaxHP() / 2
                         && player.isMovingAbility()) {
-                    return new WizardOffensive(Hero player);
+                    return new WizardOffensive(player);
                 }
                 if(player.getMaxHP() / 4 > player.getHp() && player.isMovingAbility()) {
-                    return new WizardDefensive(Hero player);
+                    return new WizardDefensive(player);
                 }
-                return new Basic(Hero player);
+                return new Basic(player);
             }
+            return null;
         }
 
 }

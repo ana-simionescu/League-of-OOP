@@ -8,6 +8,10 @@ import common.Constants;
 
 public class Spawner extends Angel {
 
+    public Spawner(int row, int column) {
+        super(row,column);
+        type = "Spawner";
+    }
     @Override
     public final void affect(final Knight knight) {
         if (!knight.isAlive())
@@ -18,7 +22,7 @@ public class Spawner extends Angel {
     public final void affect(final Pyromancer pyromancer) {
         if (!pyromancer.isAlive())
             pyromancer.setHp(Constants.SPAWNER_PYROMANCER);
-
+    }
     @Override
     public final void affect(final Rogue rogue) {
             if (!rogue.isAlive())

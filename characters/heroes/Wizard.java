@@ -11,8 +11,8 @@ public class Wizard extends Hero {
     private float drain;
     private float deflect;
 
-    public Wizard(final int row, final int column) {
-        super(row, column);
+    public Wizard(final int row, final int column, final int index) {
+        super(row, column, index);
         hp = Constants.WIZARD_HP;
         maxHP = Constants.WIZARD_HP;
         type = 'W';
@@ -22,7 +22,7 @@ public class Wizard extends Hero {
 
     public final float calculateDmg(final float baseDmg, final Terrain terrain) {
         if (terrain.getType() == 'D') {
-            return baseDmg * Constants.DESERT_MODIFIER;
+            return (baseDmg * Constants.DESERT_MODIFIER);
         }
         return baseDmg;
     }
@@ -32,6 +32,11 @@ public class Wizard extends Hero {
             return a;
         }
         return b;
+    }
+
+    @Override
+    public final String toStringName() {
+        return "Wizard " + index;
     }
 
     @Override
@@ -46,20 +51,20 @@ public class Wizard extends Hero {
     public final void attack(final Knight knight, final Terrain terrain) {
         float dmgDrain = calculateDmg(drain, terrain);
         dmgDrain = dmgDrain / Constants.PERCENT;
-        dmgDrain *= Constants.DRAIN_K_MODIFIER;
+        dmgDrain *= (Constants.DRAIN_K_MODIFIER + angelInfluence);
         dmgDrain *= min(Constants.WIZ_DRAIN_LEVEL * knight.maxHP, knight.hp);
         float dmgDeflect = calculateDmg(deflect, terrain);
         dmgDeflect /= Constants.PERCENT;
-        dmgDeflect *= Constants.DEFLECT_K_MODIFIER;
-        float victimHpLimit = knight.getExecuteHPLimit() / Constants.PERCENT * maxHP;
+        dmgDeflect *= (Constants.DEFLECT_K_MODIFIER + angelInfluence);
+        //float victimHpLimit = knight.getExecuteHPLimit() / Constants.PERCENT * maxHP;
         float dmgAdv;
-        if (hp < victimHpLimit) {
+        //if (hp < victimHpLimit) {
             dmgAdv = hp;
-        } else {
+        //} else {
             float dmgExecute = knight.calculateDmg(knight.getExecute(), terrain);
             float dmgSlam = knight.calculateDmg(knight.getSlam(), terrain);
             dmgAdv = (float) (round(dmgExecute) + round(dmgSlam));
-        }
+        //}
         dmgDeflect *= dmgAdv;
 
         int totalDmg = round(dmgDrain) + round(dmgDeflect);
@@ -70,11 +75,11 @@ public class Wizard extends Hero {
     public final void attack(final Pyromancer pyromancer, final Terrain terrain) {
         float dmgDrain = calculateDmg(drain, terrain);
         dmgDrain = dmgDrain / Constants.PERCENT;
-        dmgDrain *= Constants.DRAIN_P_MODIFIER;
+        dmgDrain *= (Constants.DRAIN_P_MODIFIER + angelInfluence);
         dmgDrain *= min(Constants.WIZ_DRAIN_LEVEL * pyromancer.maxHP, pyromancer.hp);
         float dmgDeflect = calculateDmg(deflect, terrain);
-        dmgDeflect /= Constants.PERCENT;
-        dmgDeflect *= Constants.DEFLECT_P_MODIFIER;
+        dmgDeflect = dmgDeflect / Constants.PERCENT;
+        dmgDeflect *= (Constants.DEFLECT_P_MODIFIER + angelInfluence);
 
         float dmgFireblast = pyromancer.calculateDmg(pyromancer.getFireblast(), terrain);
         float dmgIgnite = pyromancer.calculateDmg(pyromancer.getIgnite(), terrain);
@@ -92,11 +97,12 @@ public class Wizard extends Hero {
     public final void attack(final Rogue rogue, final Terrain terrain) {
         float dmgDrain = calculateDmg(drain, terrain);
         dmgDrain /= Constants.PERCENT;
-        dmgDrain *= Constants.DRAIN_R_MODIFIER;
+        dmgDrain *= (Constants.DRAIN_R_MODIFIER + angelInfluence);
         dmgDrain *= min(Constants.WIZ_DRAIN_LEVEL * rogue.maxHP, rogue.hp);
         float dmgDeflect = calculateDmg(deflect, terrain);
         dmgDeflect /= Constants.PERCENT;
-        dmgDeflect *= Constants.DEFLECT_R_MODIFIER;
+        dmgDeflect *= (Constants.DEFLECT_R_MODIFIER + angelInfluence);
+
 
         float dmgBackstab = rogue.calculateDmg(rogue.getBackstab(), terrain);
         if (rogue.getBackstabCounter() % Constants.BACKSTAB_COUNTER == 1
@@ -116,7 +122,7 @@ public class Wizard extends Hero {
     public final void attack(final Wizard wizard, final Terrain terrain) {
         float dmgDrain = calculateDmg(drain, terrain);
         dmgDrain /= Constants.PERCENT;
-        dmgDrain *= Constants.DRAIN_W_MODIFIER;
+        dmgDrain *= (Constants.DRAIN_W_MODIFIER + angelInfluence);
         dmgDrain *= min(Constants.WIZ_DRAIN_LEVEL * wizard.maxHP, wizard.hp);
         wizard.dmg = round(dmgDrain);
     }
@@ -136,6 +142,7 @@ public class Wizard extends Hero {
     @Override
     public final void levelUpByAngel() {
         level++;
+        xp = 200 + level * 50;
         hp = Constants.WIZARD_HP + Constants.W_HP_LEVEL * level;
         maxHP = Constants.WIZARD_HP + Constants.W_HP_LEVEL * level;
         drain = Constants.DRAIN + level * Constants.DRAIN_LEVEL;

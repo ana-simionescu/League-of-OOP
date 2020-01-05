@@ -1,6 +1,7 @@
 package map;
 
 
+import characters.IndexComparator;
 import characters.heroes.Hero;
 
 import java.util.ArrayList;
@@ -57,20 +58,47 @@ public final class Map {
         playersMap.get(row).get(column).remove(player);
     }
 
+    public List<Hero> getPlayersOnMap(int row, int column) {
+        playersMap.get(row).get(column).sort(new IndexComparator());
+        return playersMap.get(row).get(column);
+    }
+
     /*
-    Dacă se găsesc 2 jucători în aceeași căsuță aceștia se vor lupta
-     */
+        Dacă se găsesc 2 jucători în aceeași căsuță aceștia se vor lupta
+         */
     public boolean checkIfFightTime(final int row, final int column) {
-        if (playersMap.get(row).get(column).size() == 2) {
+        int nr = 0;
+        for (int i = 0; i < playersMap.get(row).get(column).size(); i++) {
+            if (playersMap.get(row).get(column).get(i).isAlive()) {
+                nr++;
+            }
+        }
+        if (nr == 2) {
             return true;
         }
         return false;
     }
 
     public Hero firstFighter(final int row, final int column) {
-        return playersMap.get(row).get(column).get(0);
+        int nr = 0;
+        for (int i = 0; i < playersMap.get(row).get(column).size(); i++) {
+            if (playersMap.get(row).get(column).get(i).isAlive()) {
+                nr++;
+            }
+            if(nr == 1)
+                return playersMap.get(row).get(column).get(i);
+        }
+        return null;
     }
     public Hero secondFighter(final int row, final int column) {
-        return playersMap.get(row).get(column).get(1);
+        int nr = 0;
+        for (int i = 0; i < playersMap.get(row).get(column).size(); i++) {
+            if (playersMap.get(row).get(column).get(i).isAlive()) {
+                nr++;
+            }
+            if(nr == 2)
+                return playersMap.get(row).get(column).get(i);
+        }
+        return null;
     }
 }

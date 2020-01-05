@@ -11,10 +11,11 @@ public class WizardOffensive implements Strategy {
 
     @Override
     public final void changeHp() {
+        player.setHp(player.getHp() * 9 / 10);
     }
 
     @Override
     public final void changeCoef() {
-
+        player.setAngelInfluence(player.getAngelInfluence() + 0.6f);
     }
 }

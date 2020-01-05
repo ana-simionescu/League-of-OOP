@@ -13,8 +13,8 @@ public class Knight extends Hero {
     private float executeHPLimit;
     private float slam;
 
-    public Knight(final int row, final int column) {
-        super(row, column);
+    public Knight(final int row, final int column, final int index) {
+        super(row, column, index);
         hp = Constants.KNIGHT_HP;
         maxHP = Constants.KNIGHT_HP;
         type = 'K';
@@ -25,7 +25,7 @@ public class Knight extends Hero {
 
     public final float calculateDmg(final float baseDmg, final Terrain terrain) {
         if (terrain.getType() == 'L') {
-            return baseDmg * Constants.LAND_MODIFIER;
+            return (baseDmg * Constants.LAND_MODIFIER);
         }
         return baseDmg;
     }
@@ -48,7 +48,14 @@ public class Knight extends Hero {
     }
 
     @Override
-    public final void isAffectedBy(final Angel angel) { angel.affect(this); }
+    public final void isAffectedBy(final Angel angel) {
+        //System.out.println("*");
+        angel.affect(this); }
+
+    @Override
+    public final String toStringName() {
+        return "Knight " + index;
+    }
 
     @Override
     public final void attack(final Knight knight, final Terrain terrain) {
@@ -57,7 +64,7 @@ public class Knight extends Hero {
             knight.dmg = -1;
         } else {
             float dmgExecute = calculateDmg(execute, terrain);
-            float dmgSlam = calculateDmg(slam, terrain) * Constants.SLAM_K_MODIFIER;
+            float dmgSlam = calculateDmg(slam, terrain) * (Constants.SLAM_K_MODIFIER + angelInfluence);
             int totalDmg = round(dmgExecute) + round(dmgSlam);
             knight.dmg = totalDmg;
             knight.overtimeDmgTimer = 1;
@@ -72,8 +79,8 @@ public class Knight extends Hero {
         if (pyromancer.hp < victimHpLimit) {
             pyromancer.dmg = -1;
         } else {
-            float dmgExecute = calculateDmg(execute, terrain) * Constants.EXECUTE_P_MODIFIER;
-            float dmgSlam = calculateDmg(slam, terrain) * Constants.SLAM_P_MODIFIER;
+            float dmgExecute = calculateDmg(execute, terrain) * (Constants.EXECUTE_P_MODIFIER + angelInfluence);
+            float dmgSlam = calculateDmg(slam, terrain) * (Constants.SLAM_P_MODIFIER + angelInfluence);
             int totalDmg = round(dmgExecute) + round(dmgSlam);
             pyromancer.dmg = totalDmg;
             pyromancer.overtimeDmgTimer = 1;
@@ -88,8 +95,8 @@ public class Knight extends Hero {
         if (rogue.hp < victimHpLimit) {
             rogue.dmg = -1;
         } else {
-            float dmgExecute = calculateDmg(execute, terrain) * Constants.EXECUTE_R_MODIFIER;
-            float dmgSlam = calculateDmg(slam, terrain) * Constants.SLAM_R_MODIFIER;
+            float dmgExecute = calculateDmg(execute, terrain) * (Constants.EXECUTE_R_MODIFIER + angelInfluence);
+            float dmgSlam = calculateDmg(slam, terrain) * (Constants.SLAM_R_MODIFIER + angelInfluence);
             int totalDmg = round(dmgExecute) + round(dmgSlam);
             rogue.dmg = totalDmg;
             rogue.overtimeDmgTimer = 1;
@@ -104,8 +111,8 @@ public class Knight extends Hero {
         if (wizard.hp < victimHpLimit) {
             wizard.dmg = -1;
         } else {
-            float dmgExecute = calculateDmg(execute, terrain) * Constants.EXECUTE_W_MODIFIER;
-            float dmgSlam = calculateDmg(slam, terrain) * Constants.SLAM_W_MODIFIER;
+            float dmgExecute = calculateDmg(execute, terrain) * (Constants.EXECUTE_W_MODIFIER + angelInfluence);
+            float dmgSlam = calculateDmg(slam, terrain) * (Constants.SLAM_W_MODIFIER + angelInfluence);
             int totalDmg = round(dmgExecute) + round(dmgSlam);
             wizard.dmg = totalDmg;
             wizard.overtimeDmgTimer = 1;
@@ -130,6 +137,7 @@ public class Knight extends Hero {
     @Override
     public final void levelUpByAngel() {
         level++;
+        xp = 200 + level * 50;
         hp = Constants.KNIGHT_HP + Constants.K_HP_LEVEL * level;
         maxHP = Constants.KNIGHT_HP + Constants.K_HP_LEVEL * level;
         execute = Constants.EXECUTE + level * Constants.K_EXECUTE_LEVEL;

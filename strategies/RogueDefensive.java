@@ -11,10 +11,11 @@ public class RogueDefensive implements Strategy {
 
     @Override
     public final void changeHp() {
+        player.setHp(player.getHp() * 3 / 2);
     }
 
     @Override
     public final void changeCoef() {
-
+        player.setAngelInfluence(player.getAngelInfluence() - 0.1f);
     }
 }

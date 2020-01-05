@@ -12,7 +12,7 @@ import static java.lang.Integer.max;
 
 
 public abstract class Angel {
-    protected char type;
+    protected String type;
     protected int row;
     protected int column;
 
@@ -21,7 +21,7 @@ public abstract class Angel {
     public Angel(final int row, final int column) {
         this.row = row;
         this.column = column;
-        type = '-';
+        type = "-";
     }
     /*public final String toString() {
         if (hp == -1) {
@@ -31,11 +31,19 @@ public abstract class Angel {
         }
     }*/
 
+    public int getColumn() {
+        return column;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
     public final Map getMap() {
         return map;
     }
 
-    public final char getType() {
+    public final String getType() {
         return type;
     }
 
@@ -47,6 +55,12 @@ public abstract class Angel {
 
     public final float max(final int a, final int b) {
         if (a > b) {
+            return a;
+        }
+        return b;
+    }
+    public final int min(final int a, final int b) {
+        if (a < b) {
             return a;
         }
         return b;

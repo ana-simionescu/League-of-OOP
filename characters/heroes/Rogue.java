@@ -12,8 +12,8 @@ public class Rogue extends Hero {
     private float paralysis;
     private int backstabCounter;
 
-    public Rogue(final int row, final int column) {
-        super(row, column);
+    public Rogue(final int row, final int column, final int index) {
+        super(row, column, index);
         hp = Constants.ROGUE_HP;
         maxHP = Constants.ROGUE_HP;
         type = 'R';
@@ -24,7 +24,7 @@ public class Rogue extends Hero {
 
     public final float calculateDmg(final float baseDmg, final Terrain terrain) {
         if (terrain.getType() == 'W') {
-            return baseDmg * Constants.WOODS_MODIFIER;
+            return (baseDmg * Constants.WOODS_MODIFIER);
         }
         return baseDmg;
     }
@@ -42,6 +42,11 @@ public class Rogue extends Hero {
     }
 
     @Override
+    public final String toStringName() {
+        return "Rogue " + index;
+    }
+
+    @Override
     public final void isAttackedBy(final Hero player, final Terrain terrain) {
         player.attack(this, terrain);
     }
@@ -51,12 +56,13 @@ public class Rogue extends Hero {
 
     @Override
     public final void attack(final Knight knight, final Terrain terrain) {
-        float dmgBackstab = calculateDmg(backstab, terrain) * Constants.BACKSTAB_K_MODIFIER;
+        float dmgBackstab = calculateDmg(backstab, terrain) * (Constants.BACKSTAB_K_MODIFIER + angelInfluence);
         backstabCounter++;
         if (backstabCounter % Constants.BACKSTAB_COUNTER == 1 && terrain.getType() == 'W') {
             dmgBackstab *= Constants.CRITICAL_HIT;
         }
-        float dmgParalysis = calculateDmg(paralysis, terrain) * Constants.PARALYSIS_K_MODIFIER;
+        float dmgParalysis = calculateDmg(paralysis, terrain) - 0.00001f;
+        dmgParalysis *= (Constants.PARALYSIS_K_MODIFIER + angelInfluence);
         int totalDmg = round(dmgBackstab) + round(dmgParalysis);
         knight.dmg = totalDmg;
         if (terrain.getType() == 'W') {
@@ -70,12 +76,12 @@ public class Rogue extends Hero {
 
     @Override
     public final void attack(final Pyromancer pyromancer, final Terrain terrain) {
-        float dmgBackstab = calculateDmg(backstab, terrain) * Constants.BACKSTAB_P_MODIFIER;
+        float dmgBackstab = calculateDmg(backstab, terrain) * (Constants.BACKSTAB_P_MODIFIER + angelInfluence);
         backstabCounter++;
         if (backstabCounter % Constants.BACKSTAB_COUNTER == 1 && terrain.getType() == 'W') {
             dmgBackstab *= Constants.CRITICAL_HIT;
         }
-        float dmgParalysis = calculateDmg(paralysis, terrain) * Constants.PARALYSIS_P_MODIFIER;
+        float dmgParalysis = calculateDmg(paralysis, terrain) * (Constants.PARALYSIS_P_MODIFIER + angelInfluence);
         int totalDmg = round(dmgBackstab) + round(dmgParalysis);
         //System.out.println(totalDmg);
         pyromancer.dmg = totalDmg;
@@ -90,12 +96,12 @@ public class Rogue extends Hero {
 
     @Override
     public final void attack(final Rogue rogue, final Terrain terrain) {
-        float dmgBackstab = calculateDmg(backstab, terrain) * Constants.BACKSTAB_R_MODIFIER;
+        float dmgBackstab = calculateDmg(backstab, terrain) * (Constants.BACKSTAB_R_MODIFIER + angelInfluence);
         backstabCounter++;
         if (backstabCounter % Constants.BACKSTAB_COUNTER == 1 && terrain.getType() == 'W') {
             dmgBackstab *= Constants.CRITICAL_HIT;
         }
-        float dmgParalysis = calculateDmg(paralysis, terrain) * Constants.PARALYSIS_R_MODIFIER;
+        float dmgParalysis = calculateDmg(paralysis, terrain) * (Constants.PARALYSIS_R_MODIFIER + angelInfluence)  - 0.00001f;
         int totalDmg = round(dmgBackstab) + round(dmgParalysis);
         rogue.dmg = totalDmg;
         if (terrain.getType() == 'W') {
@@ -109,12 +115,12 @@ public class Rogue extends Hero {
 
     @Override
     public final void attack(final Wizard wizard, final Terrain terrain) {
-        float dmgBackstab = calculateDmg(backstab, terrain) * Constants.BACKSTAB_W_MODIFIER;
+        float dmgBackstab = calculateDmg(backstab, terrain) * (Constants.BACKSTAB_W_MODIFIER + angelInfluence);
         backstabCounter++;
         if (backstabCounter % Constants.BACKSTAB_COUNTER == 1 && terrain.getType() == 'W') {
             dmgBackstab *= Constants.CRITICAL_HIT;
         }
-        float dmgParalysis = calculateDmg(paralysis, terrain) * Constants.PARALYSIS_W_MODIFIER;
+        float dmgParalysis = calculateDmg(paralysis, terrain) * (Constants.PARALYSIS_W_MODIFIER + angelInfluence);
         int totalDmg = round(dmgBackstab) + round(dmgParalysis);
         wizard.dmg = totalDmg;
         if (terrain.getType() == 'W') {
@@ -140,6 +146,7 @@ public class Rogue extends Hero {
     @Override
     public final void levelUpByAngel() {
         level++;
+        xp = 200 + level * 50;
         hp = Constants.ROGUE_HP + Constants.R_HP_LEVEL * level;
         maxHP = Constants.ROGUE_HP + Constants.R_HP_LEVEL * level;
         backstab = Constants.BACKSTAB + Constants.BACKSTAB_LEVEL * level;

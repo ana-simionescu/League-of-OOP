@@ -8,6 +8,10 @@ import common.Constants;
 
 public class GoodBoy extends Angel {
 
+    public GoodBoy(int row, int column) {
+        super(row,column);
+        type = "GoodBoy";
+    }
     @Override
     public final void affect(final Knight knight) {
         knight.setHp(knight.getHp() + Constants.GOODBOY_HP_KNIGHT);

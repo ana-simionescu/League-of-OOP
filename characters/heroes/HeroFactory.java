@@ -14,12 +14,12 @@ public final class HeroFactory {
         return instance;
     }
 
-    public Hero createHero(final PlayerInput player) {
+    public Hero createHero(final PlayerInput player, final int index) {
         switch (player.getType()) {
-            case "W": return new Wizard(player.getRow(), player.getColumn());
-            case "R": return new Rogue(player.getRow(), player.getColumn());
-            case "K": return new Knight(player.getRow(), player.getColumn());
-            case "P": return new Pyromancer(player.getRow(), player.getColumn());
+            case "W": return new Wizard(player.getRow(), player.getColumn(), index);
+            case "R": return new Rogue(player.getRow(), player.getColumn(), index);
+            case "K": return new Knight(player.getRow(), player.getColumn(), index);
+            case "P": return new Pyromancer(player.getRow(), player.getColumn(), index);
             default : return null;
         }
     }

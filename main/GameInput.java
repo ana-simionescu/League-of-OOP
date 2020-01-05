@@ -61,11 +61,11 @@ public class GameInput {
     }
 
     public final int getMapRows() {
-        return mapRows;
+        return map.size();
     }
 
     public final int getMapColumns() {
-        return mapColumns;
+        return map.get(0).length();
     }
 
     public final boolean isValidInput() {

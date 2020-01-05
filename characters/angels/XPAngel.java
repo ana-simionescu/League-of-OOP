@@ -8,6 +8,10 @@ import common.Constants;
 
 public class XPAngel extends Angel {
 
+    public XPAngel(int row, int column) {
+        super(row,column);
+        type = "XPAngel";
+    }
     @Override
     public final void affect(final Knight knight) {
         knight.addXP(Constants.XPANGEL_KNIGHT);

@@ -9,11 +9,13 @@ import static java.lang.Integer.max;
 
 
 public abstract class Hero {
+   protected boolean fought;
+   protected int index;
    protected char type;
    protected int row;
    protected int column;
    protected int hp;
-   protected float maxHP;
+   protected int maxHP;
    protected int xp;
    protected int level;
    protected boolean movingAbility;
@@ -23,12 +25,13 @@ public abstract class Hero {
    protected float angelInfluence;
    protected Map map = Map.getInstance();
 
-   public Hero(final int row, final int column) {
+   public Hero(final int row, final int column, final int index) {
+      this.index = index;
       this.row = row;
       this.column = column;
       map.putPlayerOnMap(row, column, this);
       hp = 0;
-      maxHP = 0f;
+      maxHP = 0;
       type = '-';
       xp = 0;
       level = 0;
@@ -37,6 +40,7 @@ public abstract class Hero {
       overtimeDmg = 0;
       dmg = 0;
       angelInfluence = 0f;
+      fought = false;
    }
    public final String toString() {
       if (hp == -1) {
@@ -45,6 +49,27 @@ public abstract class Hero {
          return type + " " + level + " " + xp + " " + hp + " " + row + " " + column;
       }
    }
+
+   public boolean isFought(){
+      return fought;
+   }
+
+   public void setFought(boolean fought) {
+      this.fought = fought;
+   }
+
+   public int getIndex() {
+      return index;
+   }
+
+   public int getRow() {
+      return row;
+   }
+
+   public int getColumn() {
+      return column;
+   }
+
 
    public final Map getMap() {
       return map;
@@ -56,7 +81,7 @@ public abstract class Hero {
       return hp;
    }
 
-   public final float getMaxHP() {
+   public final int getMaxHP() {
       return maxHP;
    }
 
@@ -126,6 +151,7 @@ public abstract class Hero {
    }
 
    public final void move(final char direction) {
+      if (row >= 0 && column >= 0)
          map.removePlayerFromMap(row, column, this);
          switch (direction) {
             case 'U': row--; break;
@@ -134,7 +160,8 @@ public abstract class Hero {
             case 'R': column++; break;
             default : break;
          }
-         map.putPlayerOnMap(row, column, this);
+         if(row >= 0 && column >= 0)
+            map.putPlayerOnMap(row, column, this);
    }
 
    public final void addXP(int exp) {
@@ -142,8 +169,8 @@ public abstract class Hero {
       levelUp();
    }
 
-   public final void growXP(final Hero player) {
-      xp += max(0, Constants.KILL_XP - (level - player.getLevel()) * Constants.KILL_XP_MODIFIER);
+   public final void growXP(final int level) {
+      xp += max(0, Constants.KILL_XP - (this.level - level) * Constants.KILL_XP_MODIFIER);
       levelUp();
    }
 
@@ -162,5 +189,6 @@ public abstract class Hero {
    public abstract void attack(Wizard wizard, Terrain terrain);
 
    public abstract void isAffectedBy(Angel angel);
+   public abstract String toStringName();
 
 }

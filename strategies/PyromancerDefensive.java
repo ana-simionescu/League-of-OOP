@@ -11,10 +11,11 @@ public class PyromancerDefensive implements Strategy {
 
     @Override
     public final void changeHp() {
+        player.setHp(player.getHp() * 4 / 3);
     }
 
     @Override
     public final void changeCoef() {
-
+        player.setAngelInfluence(player.getAngelInfluence() - 0.3f);
     }
 }

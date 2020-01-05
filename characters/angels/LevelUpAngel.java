@@ -8,6 +8,10 @@ import common.Constants;
 
 public class LevelUpAngel extends Angel {
 
+    public LevelUpAngel(int row, int column) {
+        super(row,column);
+        type = "LevelUpAngel";
+    }
     @Override
     public final void affect(final Knight knight) {
         knight.setAngelInfluence(knight.getAngelInfluence() + Constants.LEVELUPANGEL_KNIGHT);

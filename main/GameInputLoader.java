@@ -16,9 +16,12 @@ public final class GameInputLoader {
     }
 
 
-    public void write(final List<Hero> players) {
+    public void write(final List<String> output, final List<Hero> players) {
         try {
             FileSystem fs = new FileSystem(mInputPath, mOutputPath);
+            for (int i = 0; i < output.size(); i++) {
+                fs.writeWord(output.get(i));
+            }
             for (int i = 0; i < players.size(); i++) {
                 fs.writeWord(players.get(i).toString());
                 fs.writeNewLine();
@@ -77,8 +80,8 @@ public final class GameInputLoader {
                     AngelInput currAngel = new AngelInput();
                     String[] Angelstr = Angel.split(",");
                     currAngel.setType(Angelstr[0]);
-                    currAngel.setRow(Angelstr[1].charAt(0) - '0');
-                    currAngel.setColumn(Angelstr[2].charAt(0) - '0');
+                    currAngel.setRow(Integer.parseInt(Angelstr[1]));
+                    currAngel.setColumn(Integer.parseInt(Angelstr[2]));
                     angels.get(i).add(currAngel);
                 }
             }
@@ -89,7 +92,7 @@ public final class GameInputLoader {
             e1.printStackTrace();
         }
 
-        return new GameInput(mapRows, mapColumns, noPlayers, noRounds, map, playerMoves, players, angels);
+        return new GameInput(noPlayers, noRounds, map, playerMoves, players, angels);
     }
 }
 

@@ -11,10 +11,11 @@ public class KnightOffensive implements Strategy {
 
     @Override
     public final void changeHp() {
+        player.setHp(player.getHp() * 4 / 5);
     }
 
     @Override
     public final void changeCoef() {
-
+        player.setAngelInfluence(player.getAngelInfluence() + 0.5f);
     }
 }
