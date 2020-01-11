@@ -1,6 +1,7 @@
 package strategies;
 
 import characters.heroes.Hero;
+import common.Constants;
 
 public class RogueOffensive implements Strategy {
     private Hero player;
@@ -11,11 +12,11 @@ public class RogueOffensive implements Strategy {
 
     @Override
     public final void changeHp() {
-        player.setHp(player.getHp() * 6 / 7);
+        player.setHp(player.getHp() * Constants.R_OF_HP_NOMINATOR / Constants.R_OF_HP_DENOMINATOR);
     }
 
     @Override
     public final void changeCoef() {
-        player.setAngelInfluence(player.getAngelInfluence() + 0.4f);
+        player.setAngelInfluence(player.getAngelInfluence() + Constants.R_OF_COEF);
     }
 }

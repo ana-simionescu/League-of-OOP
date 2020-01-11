@@ -1,6 +1,7 @@
 package strategies;
 
 import characters.heroes.Hero;
+import common.Constants;
 
 public class PyromancerDefensive implements Strategy {
     private Hero player;
@@ -11,11 +12,12 @@ public class PyromancerDefensive implements Strategy {
 
     @Override
     public final void changeHp() {
-        player.setHp(player.getHp() * 4 / 3);
+        player.setHp(player.getHp() * Constants.P_DEF_HP_NOMINATOR
+                / Constants.P_DEF_HP_DENOMINATOR);
     }
 
     @Override
     public final void changeCoef() {
-        player.setAngelInfluence(player.getAngelInfluence() - 0.3f);
+        player.setAngelInfluence(player.getAngelInfluence() - Constants.P_DEF_COEF);
     }
 }

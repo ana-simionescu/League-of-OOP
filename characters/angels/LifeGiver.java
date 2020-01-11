@@ -8,8 +8,8 @@ import common.Constants;
 
 public class LifeGiver extends Angel {
 
-    public LifeGiver(int row, int column) {
-        super(row,column);
+    public LifeGiver(final int row, final int column) {
+        super(row, column);
         type = "LifeGiver";
     }
     @Override
@@ -19,7 +19,8 @@ public class LifeGiver extends Angel {
 
     @Override
     public final void affect(final Pyromancer pyromancer) {
-        pyromancer.setHp(min(pyromancer.getHp() + Constants.LIFEGIVER_PYROMANCER,pyromancer.getMaxHP()));
+        pyromancer.setHp(min(pyromancer.getHp() + Constants.LIFEGIVER_PYROMANCER,
+                pyromancer.getMaxHP()));
     }
 
     @Override

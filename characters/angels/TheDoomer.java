@@ -7,8 +7,8 @@ import characters.heroes.Wizard;
 
 public class TheDoomer extends Angel {
 
-    public TheDoomer(int row, int column) {
-        super(row,column);
+    public TheDoomer(final int row, final int column) {
+        super(row, column);
         type = "TheDoomer";
     }
     @Override

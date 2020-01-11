@@ -4,11 +4,7 @@ import characters.heroes.Knight;
 import characters.heroes.Pyromancer;
 import characters.heroes.Rogue;
 import characters.heroes.Wizard;
-import common.Constants;
 import map.Map;
-import map.Terrain;
-
-import static java.lang.Integer.max;
 
 
 public abstract class Angel {
@@ -31,11 +27,11 @@ public abstract class Angel {
         }
     }*/
 
-    public int getColumn() {
+    public final int getColumn() {
         return column;
     }
 
-    public int getRow() {
+    public final int getRow() {
         return row;
     }
 

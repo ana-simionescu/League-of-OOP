@@ -8,8 +8,8 @@ import common.Constants;
 
 public class LevelUpAngel extends Angel {
 
-    public LevelUpAngel(int row, int column) {
-        super(row,column);
+    public LevelUpAngel(final int row, final int column) {
+        super(row, column);
         type = "LevelUpAngel";
     }
     @Override
@@ -20,7 +20,8 @@ public class LevelUpAngel extends Angel {
 
     @Override
     public final void affect(final Pyromancer pyromancer) {
-        pyromancer.setAngelInfluence(pyromancer.getAngelInfluence() + Constants.LEVELUPANGEL_PYROMANCER);
+        pyromancer.setAngelInfluence(pyromancer.getAngelInfluence()
+                + Constants.LEVELUPANGEL_PYROMANCER);
         pyromancer.levelUpByAngel();
     }
 

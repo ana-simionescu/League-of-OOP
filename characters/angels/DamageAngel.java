@@ -6,10 +6,10 @@ import characters.heroes.Rogue;
 import characters.heroes.Wizard;
 import common.Constants;
 
-public class DamageAngel extends Angel{
+public class DamageAngel extends Angel {
 
-    public DamageAngel(int row, int column) {
-        super(row,column);
+    public DamageAngel(final int row, final int column) {
+        super(row, column);
         type = "DamageAngel";
     }
     @Override
@@ -19,7 +19,8 @@ public class DamageAngel extends Angel{
 
     @Override
     public final void affect(final Pyromancer pyromancer) {
-        pyromancer.setAngelInfluence(pyromancer.getAngelInfluence() + Constants.DAMAGEANGEL_PYROMANCER);
+        pyromancer.setAngelInfluence(pyromancer.getAngelInfluence()
+                + Constants.DAMAGEANGEL_PYROMANCER);
     }
 
     @Override

@@ -6,7 +6,7 @@ public class Terrain {
     public final char getType() {
         return type;
     }
-    public final void setType(char type) {
+    public final void setType(final char type) {
         this.type = type;
     }
 }

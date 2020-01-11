@@ -49,24 +49,23 @@ public abstract class Hero {
          return type + " " + level + " " + xp + " " + hp + " " + row + " " + column;
       }
    }
-
-   public boolean isFought(){
+   public final boolean isFought() {
       return fought;
    }
 
-   public void setFought(boolean fought) {
+   public final void setFought(final boolean fought) {
       this.fought = fought;
    }
 
-   public int getIndex() {
+   public final int getIndex() {
       return index;
    }
 
-   public int getRow() {
+   public final int getRow() {
       return row;
    }
 
-   public int getColumn() {
+   public final int getColumn() {
       return column;
    }
 
@@ -85,15 +84,15 @@ public abstract class Hero {
       return maxHP;
    }
 
-   public final void setHp(int hp) {
+   public final void setHp(final int hp) {
       this.hp = hp;
    }
 
-   public float getAngelInfluence() {
+   public final float getAngelInfluence() {
       return angelInfluence;
    }
 
-   public final void setAngelInfluence(float angelInfluence) {
+   public final void setAngelInfluence(final float angelInfluence) {
       this.angelInfluence = angelInfluence;
    }
 
@@ -151,31 +150,43 @@ public abstract class Hero {
    }
 
    public final void move(final char direction) {
-      if (row >= 0 && column >= 0)
+      if (row >= 0 && column >= 0) {
          map.removePlayerFromMap(row, column, this);
          switch (direction) {
-            case 'U': row--; break;
-            case 'D': row++; break;
-            case 'L': column--; break;
-            case 'R': column++; break;
-            default : break;
+            case 'U':
+               row--;
+               break;
+            case 'D':
+               row++;
+               break;
+            case 'L':
+               column--;
+               break;
+            case 'R':
+               column++;
+               break;
+            default:
+               break;
          }
-         if(row >= 0 && column >= 0)
+         if (row >= 0 && column >= 0) {
             map.putPlayerOnMap(row, column, this);
+         }
+      }
    }
 
-   public final void addXP(int exp) {
+   public final void addXP(final int exp) {
       xp += exp;
       levelUp();
    }
 
-   public final void growXP(final int level) {
-      xp += max(0, Constants.KILL_XP - (this.level - level) * Constants.KILL_XP_MODIFIER);
+   public final void growXP(final int lev) {
+      xp += max(0, Constants.KILL_XP - (this.level - lev) * Constants.KILL_XP_MODIFIER);
       levelUp();
    }
 
    public abstract void levelUp();
    public abstract void levelUpByAngel();
+  // public abstract void levelUpWithoutHp();
 
    /*
       Metoda primește dmg-ul de bază al abilității și îi aplică modificatorul de teren

@@ -43,7 +43,9 @@ public class Pyromancer extends Hero {
     }
 
     @Override
-    public final void isAffectedBy(final Angel angel) { angel.affect(this); }
+    public final void isAffectedBy(final Angel angel) {
+        angel.affect(this);
+    }
 
     @Override
     public final String toStringName() {
@@ -51,10 +53,12 @@ public class Pyromancer extends Hero {
     }
     @Override
     public final void attack(final Knight knight, final Terrain terrain) {
-        float dmgFireblast = round(calculateDmg(fireblast, terrain)) * (Constants.FIREBLAST_K_MODIFIER + angelInfluence);
-        float dmgIgnite = round(calculateDmg(ignite, terrain)) * (Constants.IGNITE_K_MODIFIER + angelInfluence);
+        float dmgFireblast = round(calculateDmg(fireblast, terrain))
+                * (Constants.FIREBLAST_K_MODIFIER + angelInfluence);
+        float dmgIgnite = round(calculateDmg(ignite, terrain))
+                * (Constants.IGNITE_K_MODIFIER + angelInfluence);
         float dmgIgniteOverTime = round(calculateDmg(igniteOverTime, terrain))
-                * Constants.IGNITEOVERTIME_K_MODIFIER;
+                * (Constants.IGNITEOVERTIME_K_MODIFIER + angelInfluence);
         int totalDmg = round(dmgFireblast) + round(dmgIgnite);
         knight.dmg = totalDmg;
         knight.overtimeDmgTimer = 2;
@@ -64,8 +68,10 @@ public class Pyromancer extends Hero {
 
     @Override
     public final void attack(final Pyromancer pyromancer, final Terrain terrain) {
-        float dmgFireblast = round(calculateDmg(fireblast, terrain)) * (Constants.FIREBLAST_P_MODIFIER + angelInfluence);
-        float dmgIgnite = round(calculateDmg(ignite, terrain)) * (Constants.IGNITE_P_MODIFIER + angelInfluence);
+        float dmgFireblast = round(calculateDmg(fireblast, terrain))
+                * (Constants.FIREBLAST_P_MODIFIER + angelInfluence);
+        float dmgIgnite = round(calculateDmg(ignite, terrain))
+                * (Constants.IGNITE_P_MODIFIER + angelInfluence);
         float dmgIgniteOverTime = round(calculateDmg(igniteOverTime, terrain))
                 * Constants.IGNITEOVERTIME_P_MODIFIER;
         int totalDmg = round(dmgFireblast) + round(dmgIgnite);
@@ -77,8 +83,10 @@ public class Pyromancer extends Hero {
 
     @Override
     public final void attack(final Rogue rogue, final Terrain terrain) {
-        float dmgFireblast = round(calculateDmg(fireblast, terrain)) * (Constants.FIREBLAST_R_MODIFIER + angelInfluence);
-        float dmgIgnite = round(calculateDmg(ignite, terrain)) * (Constants.IGNITE_R_MODIFIER + angelInfluence);
+        float dmgFireblast = round(calculateDmg(fireblast, terrain))
+                * (Constants.FIREBLAST_R_MODIFIER + angelInfluence);
+        float dmgIgnite = round(calculateDmg(ignite, terrain))
+                * (Constants.IGNITE_R_MODIFIER + angelInfluence);
         float dmgIgniteOverTime = round(calculateDmg(igniteOverTime, terrain))
                 * Constants.IGNITEOVERTIME_R_MODIFIER;
         int totalDmg = round(dmgFireblast) + round(dmgIgnite);
@@ -91,8 +99,10 @@ public class Pyromancer extends Hero {
 
     @Override
     public final void attack(final Wizard wizard, final Terrain terrain) {
-        float dmgFireblast = round(calculateDmg(fireblast, terrain)) * (Constants.FIREBLAST_W_MODIFIER + angelInfluence);
-        float dmgIgnite = round(calculateDmg(ignite, terrain)) * (Constants.IGNITE_W_MODIFIER + angelInfluence);
+        float dmgFireblast = round(calculateDmg(fireblast, terrain))
+                * (Constants.FIREBLAST_W_MODIFIER + angelInfluence);
+        float dmgIgnite = round(calculateDmg(ignite, terrain))
+                * (Constants.IGNITE_W_MODIFIER + angelInfluence);
         float dmgIgniteOverTime = round(calculateDmg(igniteOverTime, terrain))
                 * Constants.IGNITEOVERTIME_W_MODIFIER;
         int totalDmg = round(dmgFireblast) + round(dmgIgnite);
@@ -104,14 +114,25 @@ public class Pyromancer extends Hero {
 
     @Override
     public final void levelUp() {
-        if (xp >= Constants.LEVEL_UP_LIMIT + level * Constants.LEVEL_UP) {
-            level++;
-            hp = Constants.PYROMANCER_HP + Constants.P_HP_LEVEL * level;
-            maxHP = Constants.PYROMANCER_HP + Constants.P_HP_LEVEL * level;
-            fireblast = Constants.FIREBLAST + level * Constants.FIREBLAST_LEVEL;
-            ignite = Constants.IGNITE + level * Constants.IGNITE_LEVEL;
-            igniteOverTime = Constants.IGNITE_OVERTIME + level * Constants.IGNITEOVERTIME_LEVEL;
-            levelUp();
+        if (hp != -1) {
+            if (xp >= Constants.LEVEL_UP_LIMIT + level * Constants.LEVEL_UP) {
+                level++;
+                hp = Constants.PYROMANCER_HP + Constants.P_HP_LEVEL * level;
+                maxHP = Constants.PYROMANCER_HP + Constants.P_HP_LEVEL * level;
+                fireblast = Constants.FIREBLAST + level * Constants.FIREBLAST_LEVEL;
+                ignite = Constants.IGNITE + level * Constants.IGNITE_LEVEL;
+                igniteOverTime = Constants.IGNITE_OVERTIME + level * Constants.IGNITEOVERTIME_LEVEL;
+                levelUp();
+            }
+        } else {
+            if (xp >= Constants.LEVEL_UP_LIMIT + level * Constants.LEVEL_UP) {
+                level++;
+                maxHP = Constants.PYROMANCER_HP + Constants.P_HP_LEVEL * level;
+                fireblast = Constants.FIREBLAST + level * Constants.FIREBLAST_LEVEL;
+                ignite = Constants.IGNITE + level * Constants.IGNITE_LEVEL;
+                igniteOverTime = Constants.IGNITE_OVERTIME + level * Constants.IGNITEOVERTIME_LEVEL;
+                levelUp();
+            }
         }
     }
 
@@ -119,7 +140,7 @@ public class Pyromancer extends Hero {
     @Override
     public final void levelUpByAngel() {
         level++;
-        xp = 200 + level * 50;
+        xp = Constants.XP + level * Constants.LEVEL_UP;
         hp = Constants.PYROMANCER_HP + Constants.P_HP_LEVEL * level;
         maxHP = Constants.PYROMANCER_HP + Constants.P_HP_LEVEL * level;
         fireblast = Constants.FIREBLAST + level * Constants.FIREBLAST_LEVEL;

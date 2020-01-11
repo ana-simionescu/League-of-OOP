@@ -58,7 +58,7 @@ public final class Map {
         playersMap.get(row).get(column).remove(player);
     }
 
-    public List<Hero> getPlayersOnMap(int row, int column) {
+    public List<Hero> getPlayersOnMap(final int row, final int column) {
         playersMap.get(row).get(column).sort(new IndexComparator());
         return playersMap.get(row).get(column);
     }
@@ -85,8 +85,9 @@ public final class Map {
             if (playersMap.get(row).get(column).get(i).isAlive()) {
                 nr++;
             }
-            if(nr == 1)
+            if (nr == 1) {
                 return playersMap.get(row).get(column).get(i);
+            }
         }
         return null;
     }
@@ -96,8 +97,9 @@ public final class Map {
             if (playersMap.get(row).get(column).get(i).isAlive()) {
                 nr++;
             }
-            if(nr == 2)
+            if (nr == 2) {
                 return playersMap.get(row).get(column).get(i);
+            }
         }
         return null;
     }

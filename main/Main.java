@@ -15,6 +15,70 @@ public final class Main {
     private Main() {
     }
 
+    public static void fight(final Hero firstFighter, final Hero secondFighter, final Map map,
+                             final GreatWiz greatWiz, final List<String> output) {
+        secondFighter.isAttackedBy(firstFighter,
+                map.getCellType(firstFighter.getRow(), firstFighter.getColumn()));
+        firstFighter.isAttackedBy(secondFighter,
+                map.getCellType(firstFighter.getRow(), firstFighter.getColumn()));
+                                /*
+                                Se aplică daunele calculate anterior
+                                 */
+        secondFighter.sufferDmg();
+        firstFighter.sufferDmg();
+        if (firstFighter.getIndex() > secondFighter.getIndex()) {
+            if (!firstFighter.isAlive()) {
+                greatWiz.getHeroKilled().update(firstFighter, secondFighter, output);
+            }
+            if (!secondFighter.isAlive()) {
+                greatWiz.getHeroKilled().update(secondFighter, firstFighter, output);
+            }
+        } else {
+            if (!secondFighter.isAlive()) {
+                greatWiz.getHeroKilled().update(secondFighter, firstFighter, output);
+            }
+            if (!firstFighter.isAlive()) {
+                greatWiz.getHeroKilled().update(firstFighter, secondFighter, output);
+            }
+        }
+         /*
+         Dacă unul dintre jucători îl omoară pe celălalt, Xp-ul său crește
+         */
+        if (firstFighter.getIndex() > secondFighter.getIndex()) {
+            int levelSecond = secondFighter.getLevel();
+            if (firstFighter.getHp() == -1) {
+                int level = secondFighter.getLevel();
+                secondFighter.growXP(firstFighter.getLevel());
+                if (level != secondFighter.getLevel()) {
+                    greatWiz.getHeroLeveledUp().update(secondFighter, level, output);
+                }
+            }
+            if (secondFighter.getHp() == -1) {
+                int level = firstFighter.getLevel();
+                firstFighter.growXP(levelSecond);
+                if (level != firstFighter.getLevel()) {
+                    greatWiz.getHeroLeveledUp().update(firstFighter, level, output);
+                }
+            }
+        } else {
+            int levelFirst = firstFighter.getLevel();
+            if (secondFighter.getHp() == -1) {
+                int level = firstFighter.getLevel();
+                firstFighter.growXP(secondFighter.getLevel());
+                if (level != firstFighter.getLevel()) {
+                    greatWiz.getHeroLeveledUp().update(firstFighter, level, output);
+                }
+            }
+            if (firstFighter.getHp() == -1) {
+                int level = secondFighter.getLevel();
+                secondFighter.growXP(levelFirst);
+                if (level != secondFighter.getLevel()) {
+                    greatWiz.getHeroLeveledUp().update(secondFighter, level, output);
+                }
+            }
+        }
+    }
+
     public static void main(final String[] args) {
         GameInputLoader gameInputLoader = new GameInputLoader(args[0], args[1]);
         GameInput gameInput = gameInputLoader.load();
@@ -40,16 +104,11 @@ public final class Main {
                 angels.get(i).add(angelFactory.createAngel(gameInput.getAngels().get(i).get(j)));
             }
         }
-        /*for (int i = 0; i < gameInput.getNoRounds(); i++) {
-            for (int j = 0; j < gameInput.getAngels().get(i).size(); j++) {
-                System.out.println(angels.get(i).get(j).getType());
-            }
-        }*/
         for (int k = 0; k < gameInput.getNoRounds(); k++) {
             if (k != 0) {
                 output.add("\n");
             }
-            output.add("~~ Round " + (k+1) + " ~~\n");
+            output.add("~~ Round " + (k + 1) + " ~~\n");
             String currMove = moves.get(k);
             /*
             Parcurg mișcările fiecărei runde si dacă jucătorul e în viață și
@@ -57,7 +116,6 @@ public final class Main {
              */
             for (int j = 0; j < currMove.length(); j++) {
                 players.get(j).setFought(false);
-               // players.get(j).sufferOvertimeDmg();
                 if (players.get(j).isMovingAbility() && players.get(j).isAlive()) {
                     players.get(j).move(currMove.charAt(j));
                     players.get(j).sufferOvertimeDmg();
@@ -78,140 +136,74 @@ public final class Main {
                 Parcurg harta și verific dacă 2 jucători s-au întâlnit
              */
             for (int i = 0; i < players.size(); i++) {
-                System.out.println(players.get(i).getRow());
-                System.out.println(players.get(i).getColumn());
-                System.out.println("\n");
-            }
-            for (int i = 0; i < players.size(); i++) {
-                    if(!players.get(i).isAlive()) continue;
+                    if (!players.get(i).isAlive()) {
+                        continue;
+                    }
                     int row = players.get(i).getRow();
                     int column = players.get(i).getColumn();
-                    if(row < 0 || column < 0) continue;
+                    if (row < 0 || column < 0) {
+                        continue;
+                    }
                     if (map.checkIfFightTime(row, column)) {
                         Hero firstFighter = map.firstFighter(row, column);
                         Hero secondFighter = map.secondFighter(row, column);
-                        if(firstFighter.isFought() == true || secondFighter.isFought() == true)
+
+                        if (firstFighter.isFought() || secondFighter.isFought()) {
                             continue;
+                        }
                         firstFighter.setFought(true);
                         secondFighter.setFought(true);
+                        if (firstFighter.getType() == 'W') {
+                            fight(secondFighter, firstFighter, map, greatWiz, output);
+                        } else {
+                            fight(firstFighter, secondFighter, map, greatWiz, output);
+                        }
+
                         /*
                         Vreau să calculez atacul lui wizard mereu a 2a oară
                         pentru a putea calcula dmg-ul dat de adversarul său
                          */
-                        if (firstFighter.getType() != 'W') {
-                                /*
-                                Se calculează daunele produse celuilalt jucător în urma luptei
-                                 */
-                                secondFighter.isAttackedBy(firstFighter,
-                                        map.getCellType(row, column));
-                                firstFighter.isAttackedBy(secondFighter,
-                                        map.getCellType(row, column));
-                                /*
-                                Se aplică daunele calculate anterior
-                                 */
-                                secondFighter.sufferDmg();
-                                firstFighter.sufferDmg();
-                            if (firstFighter.getIndex() > secondFighter.getIndex()) {
-                                if (!firstFighter.isAlive()) {
-                                    greatWiz.getHeroKilled().update(firstFighter, secondFighter, output);
-                                }
-                                if (!secondFighter.isAlive()) {
-                                    greatWiz.getHeroKilled().update(secondFighter, firstFighter, output);
-                                }} else {
-                                if (!secondFighter.isAlive()) {
-                                    greatWiz.getHeroKilled().update(secondFighter, firstFighter, output);
-                                }
-                                if (!firstFighter.isAlive()) {
-                                    greatWiz.getHeroKilled().update(firstFighter, secondFighter, output);
-                                }
-                            }
-                                /*
-                                Dacă unul dintre jucători îl omoară pe celălalt, Xp-ul său crește
-                                 */
-                                int levelSecond = secondFighter.getLevel();
-                                if (firstFighter.getHp() == -1) {
-                                    int level = secondFighter.getLevel();
-                                    secondFighter.growXP(firstFighter.getLevel());
-                                    if (level != secondFighter.getLevel()) {
-                                        greatWiz.getHeroLeveledUp().update(secondFighter, level, output);
-                                    }
-                                }
-                                if (secondFighter.getHp() == -1) {
-                                    int level = firstFighter.getLevel();
-                                    firstFighter.growXP(levelSecond);
-                                    if (level != firstFighter.getLevel()) {
-                                        greatWiz.getHeroLeveledUp().update(firstFighter, level, output);
-                                    }
-                                }
-
-                        } else {
-                                firstFighter.isAttackedBy(secondFighter,
-                                        map.getCellType(row, column));
-                                secondFighter.isAttackedBy(firstFighter,
-                                        map.getCellType(row, column));
-                                secondFighter.sufferDmg();
-                                firstFighter.sufferDmg();
-                                if (firstFighter.getIndex() > secondFighter.getIndex()) {
-                                if (!firstFighter.isAlive()) {
-                                    greatWiz.getHeroKilled().update(firstFighter, secondFighter, output);
-                                }
-                                if (!secondFighter.isAlive()) {
-                                    greatWiz.getHeroKilled().update(secondFighter, firstFighter, output);
-                                }} else {
-                                    if (!secondFighter.isAlive()) {
-                                        greatWiz.getHeroKilled().update(secondFighter, firstFighter, output);
-                                    }
-                                    if (!firstFighter.isAlive()) {
-                                        greatWiz.getHeroKilled().update(firstFighter, secondFighter, output);
-                                    }
-                                }
-                                if (firstFighter.getHp() == -1 && secondFighter.getHp() != -1) {
-                                    int level = secondFighter.getLevel();
-                                    secondFighter.growXP(firstFighter.getLevel());
-                                    if (level != secondFighter.getLevel()) {
-                                        greatWiz.getHeroLeveledUp().update(secondFighter, level, output);
-                                    }
-                                }
-                                if (secondFighter.getHp() == -1 && firstFighter.getHp() != -1) {
-                                    int level = firstFighter.getLevel();
-                                    firstFighter.growXP(secondFighter.getLevel());
-                                    if (level != firstFighter.getLevel()) {
-                                        greatWiz.getHeroLeveledUp().update(firstFighter, level, output);
-                                    }
-                                }
-                        }
                     }
-
 
             }
             for (int i = 0; i < angels.get(k).size(); i++) {
                 Angel angel = angels.get(k).get(i);
                 greatWiz.getAngelSpawned().update(angel, output);
-                for (int j = 0; j < map.getPlayersOnMap(angel.getRow(), angel.getColumn()).size(); j++) {
-                    if (map.getPlayersOnMap(angel.getRow(), angel.getColumn()).get(j).isAlive() && angel.getType() != "Spawner") {
-                        int level = map.getPlayersOnMap(angel.getRow(), angel.getColumn()).get(j).getLevel();
-                        map.getPlayersOnMap(angel.getRow(), angel.getColumn()).get(j).isAffectedBy(angel);
-                        greatWiz.getAngelInvolved().update(angel, map.getPlayersOnMap(angel.getRow(), angel.getColumn()).get(j), output);
+                int row = angel.getRow();
+                int column = angel.getColumn();
+                for (int j = 0; j < map.getPlayersOnMap(row, column).size(); j++) {
+                    if (map.getPlayersOnMap(row, column).get(j).isAlive()
+                            && angel.getType() != "Spawner") {
+                        int level = map.getPlayersOnMap(row, column).get(j).getLevel();
+                        map.getPlayersOnMap(row, column).get(j).isAffectedBy(angel);
+                        greatWiz.getAngelInvolved().update(angel,
+                                map.getPlayersOnMap(row, column).get(j), output);
                         if (angel.getType() == "LevelUpAngel") {
-                            greatWiz.getHeroLeveledUp().update(map.getPlayersOnMap(angel.getRow(), angel.getColumn()).get(j),
-                                    level, output);
+                            greatWiz.getHeroLeveledUp().update(map.getPlayersOnMap(row,
+                                    column).get(j), level, output);
                         }
                         if (angel.getType() == "XPAngel") {
-                            if (level != map.getPlayersOnMap(angel.getRow(), angel.getColumn()).get(j).getLevel())
-                            greatWiz.getHeroLeveledUp().update(map.getPlayersOnMap(angel.getRow(), angel.getColumn()).get(j),
-                                   level, output);
+                            if (level != map.getPlayersOnMap(row, column).get(j).getLevel()) {
+                                greatWiz.getHeroLeveledUp().update(map.getPlayersOnMap(row,
+                                        column).get(j), level, output);
+                            }
                         }
-                        if(!map.getPlayersOnMap(angel.getRow(), angel.getColumn()).get(j).isAlive()) {
-                            greatWiz.getHeroKilledByAngel().update(map.getPlayersOnMap(angel.getRow(), angel.getColumn()).get(j), output);
+                        if (!map.getPlayersOnMap(row, column).get(j).isAlive()) {
+                            greatWiz.getHeroKilledByAngel().update(map.getPlayersOnMap(row,
+                                    column).get(j), output);
                         }
                     } else {
-                        if(!map.getPlayersOnMap(angel.getRow(), angel.getColumn()).get(j).isAlive() && angel.getType() == "Spawner") {
-                            map.getPlayersOnMap(angel.getRow(), angel.getColumn()).get(j).isAffectedBy(angel);
-                            greatWiz.getAngelInvolved().update(angel, map.getPlayersOnMap(angel.getRow(), angel.getColumn()).get(j), output);
-                            greatWiz.getHeroRevived().update(map.getPlayersOnMap(angel.getRow(), angel.getColumn()).get(j), output);
+                        if (!map.getPlayersOnMap(row, column).get(j).isAlive()
+                                && angel.getType() == "Spawner") {
+                            map.getPlayersOnMap(row, column).get(j).isAffectedBy(angel);
+                            greatWiz.getAngelInvolved().update(angel,
+                                    map.getPlayersOnMap(row, column).get(j), output);
+                            greatWiz.getHeroRevived().update(map.getPlayersOnMap(row,
+                                    column).get(j), output);
                         }
                     }
                 }
+
             }
         }
         output.add("\n~~ Results ~~\n");

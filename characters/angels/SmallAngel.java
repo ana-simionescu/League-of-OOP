@@ -8,7 +8,7 @@ import common.Constants;
 
 public class SmallAngel extends Angel {
 
-    public SmallAngel(int row, int column) {
+    public SmallAngel(final int row, final int column) {
         super(row, column);
         type = "SmallAngel";
     }
@@ -21,7 +21,8 @@ public class SmallAngel extends Angel {
     @Override
     public final void affect(final Pyromancer pyromancer) {
         pyromancer.setHp(pyromancer.getHp() + Constants.SMALLANGEL_HP_PYROMANCER);
-        pyromancer.setAngelInfluence(pyromancer.getAngelInfluence() + Constants.SMALLANGEL_DMG_PYROMANCER);
+        pyromancer.setAngelInfluence(pyromancer.getAngelInfluence()
+                + Constants.SMALLANGEL_DMG_PYROMANCER);
     }
 
     @Override

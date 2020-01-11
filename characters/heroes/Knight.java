@@ -64,7 +64,8 @@ public class Knight extends Hero {
             knight.dmg = -1;
         } else {
             float dmgExecute = calculateDmg(execute, terrain);
-            float dmgSlam = calculateDmg(slam, terrain) * (Constants.SLAM_K_MODIFIER + angelInfluence);
+            float dmgSlam = calculateDmg(slam, terrain)
+                    * (Constants.SLAM_K_MODIFIER + angelInfluence);
             int totalDmg = round(dmgExecute) + round(dmgSlam);
             knight.dmg = totalDmg;
             knight.overtimeDmgTimer = 1;
@@ -79,8 +80,10 @@ public class Knight extends Hero {
         if (pyromancer.hp < victimHpLimit) {
             pyromancer.dmg = -1;
         } else {
-            float dmgExecute = calculateDmg(execute, terrain) * (Constants.EXECUTE_P_MODIFIER + angelInfluence);
-            float dmgSlam = calculateDmg(slam, terrain) * (Constants.SLAM_P_MODIFIER + angelInfluence);
+            float dmgExecute = calculateDmg(execute, terrain)
+                    * (Constants.EXECUTE_P_MODIFIER + angelInfluence);
+            float dmgSlam = calculateDmg(slam, terrain)
+                    * (Constants.SLAM_P_MODIFIER + angelInfluence);
             int totalDmg = round(dmgExecute) + round(dmgSlam);
             pyromancer.dmg = totalDmg;
             pyromancer.overtimeDmgTimer = 1;
@@ -95,8 +98,10 @@ public class Knight extends Hero {
         if (rogue.hp < victimHpLimit) {
             rogue.dmg = -1;
         } else {
-            float dmgExecute = calculateDmg(execute, terrain) * (Constants.EXECUTE_R_MODIFIER + angelInfluence);
-            float dmgSlam = calculateDmg(slam, terrain) * (Constants.SLAM_R_MODIFIER + angelInfluence);
+            float dmgExecute = calculateDmg(execute, terrain)
+                    * (Constants.EXECUTE_R_MODIFIER + angelInfluence);
+            float dmgSlam = calculateDmg(slam, terrain)
+                    * (Constants.SLAM_R_MODIFIER + angelInfluence);
             int totalDmg = round(dmgExecute) + round(dmgSlam);
             rogue.dmg = totalDmg;
             rogue.overtimeDmgTimer = 1;
@@ -111,8 +116,10 @@ public class Knight extends Hero {
         if (wizard.hp < victimHpLimit) {
             wizard.dmg = -1;
         } else {
-            float dmgExecute = calculateDmg(execute, terrain) * (Constants.EXECUTE_W_MODIFIER + angelInfluence);
-            float dmgSlam = calculateDmg(slam, terrain) * (Constants.SLAM_W_MODIFIER + angelInfluence);
+            float dmgExecute = calculateDmg(execute, terrain)
+                    * (Constants.EXECUTE_W_MODIFIER + angelInfluence);
+            float dmgSlam = calculateDmg(slam, terrain)
+                    * (Constants.SLAM_W_MODIFIER + angelInfluence);
             int totalDmg = round(dmgExecute) + round(dmgSlam);
             wizard.dmg = totalDmg;
             wizard.overtimeDmgTimer = 1;
@@ -123,25 +130,41 @@ public class Knight extends Hero {
 
     @Override
     public final void levelUp() {
-        if (xp >= Constants.LEVEL_UP_LIMIT + level * Constants.LEVEL_UP) {
-            level++;
-            hp = Constants.KNIGHT_HP + Constants.K_HP_LEVEL * level;
-            maxHP = Constants.KNIGHT_HP + Constants.K_HP_LEVEL * level;
-            execute = Constants.EXECUTE + level * Constants.K_EXECUTE_LEVEL;
-            executeHPLimit = min(Constants.EXECUTE_HP_LIMIT, Constants.EXECUTE_HP_LIMIT + level);
-            slam = Constants.SLAM + Constants.SLAM_LEVEL * level;
-            levelUp();
+        if (hp != -1) {
+            if (xp >= Constants.LEVEL_UP_LIMIT + level * Constants.LEVEL_UP) {
+                level++;
+                hp = Constants.KNIGHT_HP + Constants.K_HP_LEVEL * level;
+                maxHP = Constants.KNIGHT_HP + Constants.K_HP_LEVEL * level;
+                execute = Constants.EXECUTE + level * Constants.K_EXECUTE_LEVEL;
+                executeHPLimit = min(Constants.EXECUTE_HP_LIMIT,
+                        Constants.EXECUTE_HP_LIMIT + level);
+                slam = Constants.SLAM + Constants.SLAM_LEVEL * level;
+                levelUp();
+            }
+        } else {
+            if (xp >= Constants.LEVEL_UP_LIMIT + level * Constants.LEVEL_UP) {
+                level++;
+                maxHP = Constants.KNIGHT_HP + Constants.K_HP_LEVEL * level;
+                execute = Constants.EXECUTE + level * Constants.K_EXECUTE_LEVEL;
+                executeHPLimit = min(Constants.EXECUTE_HP_LIMIT,
+                        Constants.EXECUTE_HP_LIMIT + level);
+                slam = Constants.SLAM + Constants.SLAM_LEVEL * level;
+                levelUp();
+            }
         }
     }
 
     @Override
     public final void levelUpByAngel() {
         level++;
-        xp = 200 + level * 50;
+        xp = Constants.XP + level * Constants.LEVEL_UP;
         hp = Constants.KNIGHT_HP + Constants.K_HP_LEVEL * level;
         maxHP = Constants.KNIGHT_HP + Constants.K_HP_LEVEL * level;
         execute = Constants.EXECUTE + level * Constants.K_EXECUTE_LEVEL;
         executeHPLimit = min(Constants.EXECUTE_HP_LIMIT, Constants.EXECUTE_HP_LIMIT + level);
         slam = Constants.SLAM + Constants.SLAM_LEVEL * level;
     }
+
+
+
 }

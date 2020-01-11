@@ -42,7 +42,7 @@ public final class GameInputLoader {
         List<String> map = new ArrayList<>();
         List<PlayerInput> players = new ArrayList<>();
         List<String> playerMoves = new ArrayList<>();
-        List<List<AngelInput>> angels= new ArrayList<>();
+        List<List<AngelInput>> angels = new ArrayList<>();
 
 
         try {
@@ -76,12 +76,12 @@ public final class GameInputLoader {
             for (int i = 0; i < noRounds; ++i) {
                 int noAngels = fs.nextInt();
                 for (int j = 0; j < noAngels; j++) {
-                    String Angel = fs.nextWord();
+                    String angel = fs.nextWord();
                     AngelInput currAngel = new AngelInput();
-                    String[] Angelstr = Angel.split(",");
-                    currAngel.setType(Angelstr[0]);
-                    currAngel.setRow(Integer.parseInt(Angelstr[1]));
-                    currAngel.setColumn(Integer.parseInt(Angelstr[2]));
+                    String[] angelstr = angel.split(",");
+                    currAngel.setType(angelstr[0]);
+                    currAngel.setRow(Integer.parseInt(angelstr[1]));
+                    currAngel.setColumn(Integer.parseInt(angelstr[2]));
                     angels.get(i).add(currAngel);
                 }
             }

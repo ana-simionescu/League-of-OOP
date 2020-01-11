@@ -1,6 +1,7 @@
 package strategies;
 
 import characters.heroes.Hero;
+import common.Constants;
 
 public class WizardOffensive implements Strategy {
     private Hero player;
@@ -11,11 +12,11 @@ public class WizardOffensive implements Strategy {
 
     @Override
     public final void changeHp() {
-        player.setHp(player.getHp() * 9 / 10);
+        player.setHp(player.getHp() * Constants.W_OF_HP_NOMINATOR / Constants.W_OF_HP_DENOMINATOR);
     }
 
     @Override
     public final void changeCoef() {
-        player.setAngelInfluence(player.getAngelInfluence() + 0.6f);
+        player.setAngelInfluence(player.getAngelInfluence() + Constants.W_OF_COEF);
     }
 }

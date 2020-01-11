@@ -8,8 +8,8 @@ import common.Constants;
 
 public class GoodBoy extends Angel {
 
-    public GoodBoy(int row, int column) {
-        super(row,column);
+    public GoodBoy(final int row, final int column) {
+        super(row, column);
         type = "GoodBoy";
     }
     @Override
@@ -21,7 +21,8 @@ public class GoodBoy extends Angel {
     @Override
     public final void affect(final Pyromancer pyromancer) {
         pyromancer.setHp(pyromancer.getHp() + Constants.GOODBOY_HP_PYROMANCER);
-        pyromancer.setAngelInfluence(pyromancer.getAngelInfluence() + Constants.GOODBOY_DMG_PYROMANCER);
+        pyromancer.setAngelInfluence(pyromancer.getAngelInfluence()
+                + Constants.GOODBOY_DMG_PYROMANCER);
     }
 
     @Override

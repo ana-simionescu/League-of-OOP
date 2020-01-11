@@ -5,10 +5,10 @@ import characters.angels.Angel;
 import java.util.List;
 
 public class AngelSpawned {
-    public void update(final Angel angel, List<String> output) {
+    public final void update(final Angel angel, final List<String> output) {
         switch (angel.getType()) {
-            case "DamageAngel": output.add("Angel DamageAngel was spawned at " + angel.getRow() + " "
-                    + angel.getColumn() + "\n"); break;
+            case "DamageAngel": output.add("Angel DamageAngel was spawned at "
+                    + angel.getRow() + " " + angel.getColumn() + "\n"); break;
             case "DarkAngel": output.add("Angel DarkAngel was spawned at " + angel.getRow() + " "
                     + angel.getColumn() + "\n"); break;
             case "Dracula": output.add("Angel Dracula was spawned at "
@@ -27,7 +27,7 @@ public class AngelSpawned {
                     + angel.getRow() + " " + angel.getColumn() + "\n"); break;
             case "XPAngel": output.add("Angel XPAngel was spawned at "
                     + angel.getRow() + " " + angel.getColumn() + "\n"); break;
-            default : ;
+            default : break;
         }
     }
 }

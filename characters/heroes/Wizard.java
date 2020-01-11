@@ -45,7 +45,9 @@ public class Wizard extends Hero {
     }
 
     @Override
-    public final void isAffectedBy(final Angel angel) { angel.affect(this); }
+    public final void isAffectedBy(final Angel angel) {
+        angel.affect(this);
+    }
 
     @Override
     public final void attack(final Knight knight, final Terrain terrain) {
@@ -128,21 +130,32 @@ public class Wizard extends Hero {
     }
     @Override
     public final void levelUp() {
-        if (xp >= Constants.LEVEL_UP_LIMIT + level * Constants.LEVEL_UP) {
-            level++;
-            hp = Constants.WIZARD_HP + Constants.W_HP_LEVEL * level;
-            maxHP = Constants.WIZARD_HP + Constants.W_HP_LEVEL * level;
-            drain = Constants.DRAIN + level * Constants.DRAIN_LEVEL;
-            deflect = min(Constants.DEFLECT + Constants.DEFLECT_LEVEL * level,
-                    Constants.DEFLECT_LIMIT);
-            levelUp();
+        if (hp != -1) {
+            if (xp >= Constants.LEVEL_UP_LIMIT + level * Constants.LEVEL_UP) {
+                level++;
+                hp = Constants.WIZARD_HP + Constants.W_HP_LEVEL * level;
+                maxHP = Constants.WIZARD_HP + Constants.W_HP_LEVEL * level;
+                drain = Constants.DRAIN + level * Constants.DRAIN_LEVEL;
+                deflect = min(Constants.DEFLECT + Constants.DEFLECT_LEVEL * level,
+                        Constants.DEFLECT_LIMIT);
+                levelUp();
+            }
+        } else {
+            if (xp >= Constants.LEVEL_UP_LIMIT + level * Constants.LEVEL_UP) {
+                level++;
+                maxHP = Constants.WIZARD_HP + Constants.W_HP_LEVEL * level;
+                drain = Constants.DRAIN + level * Constants.DRAIN_LEVEL;
+                deflect = min(Constants.DEFLECT + Constants.DEFLECT_LEVEL * level,
+                        Constants.DEFLECT_LIMIT);
+                levelUp();
+            }
         }
     }
 
     @Override
     public final void levelUpByAngel() {
         level++;
-        xp = 200 + level * 50;
+        xp = Constants.XP + level * Constants.LEVEL_UP;
         hp = Constants.WIZARD_HP + Constants.W_HP_LEVEL * level;
         maxHP = Constants.WIZARD_HP + Constants.W_HP_LEVEL * level;
         drain = Constants.DRAIN + level * Constants.DRAIN_LEVEL;

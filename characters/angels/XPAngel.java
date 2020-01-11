@@ -8,8 +8,8 @@ import common.Constants;
 
 public class XPAngel extends Angel {
 
-    public XPAngel(int row, int column) {
-        super(row,column);
+    public XPAngel(final int row, final int column) {
+        super(row, column);
         type = "XPAngel";
     }
     @Override

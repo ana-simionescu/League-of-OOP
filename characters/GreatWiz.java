@@ -1,15 +1,19 @@
 package characters;
 
-import characters.heroes.Hero;
-import observers.*;
+import observers.AngelInvolved;
+import observers.AngelSpawned;
+import observers.HeroKilled;
+import observers.HeroLeveledUp;
+import observers.HeroRevived;
+import observers.HeroKilledByAngel;
 
-public class GreatWiz {
-    AngelInvolved angelInvolved;
-    AngelSpawned angelSpawned;
-    HeroKilled heroKilled;
-    HeroLeveledUp heroLeveledUp;
-    HeroKilledByAngel heroKilledByAngel;
-    HeroRevived heroRevived;
+public final class GreatWiz {
+    private AngelInvolved angelInvolved;
+    private AngelSpawned angelSpawned;
+    private HeroKilled heroKilled;
+    private HeroLeveledUp heroLeveledUp;
+    private HeroKilledByAngel heroKilledByAngel;
+    private HeroRevived heroRevived;
 
     public HeroKilledByAngel getHeroKilledByAngel() {
         return heroKilledByAngel;
@@ -47,7 +51,7 @@ public class GreatWiz {
         heroRevived = new HeroRevived();
     }
 
-    static public GreatWiz getInstance() {
+    public static GreatWiz getInstance() {
         if (instance == null) {
             instance = new GreatWiz();
         }

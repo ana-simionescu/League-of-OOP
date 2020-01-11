@@ -69,8 +69,10 @@ public class GameInput {
     }
 
     public final boolean isValidInput() {
-        boolean membersInstantiated = map != null && playerMoves != null && players != null && angels != null;
-        boolean membersNotEmpty = map.size() > 0 && playerMoves.size() > 0 && players.size() > 0 && angels.size() > 0
+        boolean membersInstantiated = map != null && playerMoves != null
+                && players != null && angels != null;
+        boolean membersNotEmpty = map.size() > 0 && playerMoves.size() > 0
+                && players.size() > 0 && angels.size() > 0
                 && mapRows > 0 && mapColumns > 0 && noRounds > 0 && noPlayers > 0;
 
         return membersInstantiated && membersNotEmpty;

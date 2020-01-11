@@ -1,6 +1,7 @@
 package strategies;
 
 import characters.heroes.Hero;
+import common.Constants;
 
 public class KnightDefensive implements Strategy {
     private Hero player;
@@ -11,11 +12,12 @@ public class KnightDefensive implements Strategy {
 
     @Override
     public final void changeHp() {
-        player.setHp(player.getHp() * 5 / 4);
+        player.setHp(player.getHp() * Constants.K_DEF_HP_NOMINATOR
+                / Constants.K_DEF_HP_DENOMINATOR);
     }
 
     @Override
     public final void changeCoef() {
-        player.setAngelInfluence(player.getAngelInfluence() - 0.2f);
+        player.setAngelInfluence(player.getAngelInfluence() - Constants.K_DEF_COEF);
     }
 }
