@@ -26,8 +26,6 @@ public class GameInput {
     public GameInput(final int noPlayers, final int rounds,
                      final List<String> map, final List<String> moves,
                      final List<PlayerInput> players, final List<List<AngelInput>> angels) {
-       // mapRows = rows;
-        //mapColumns = columns;
         this.noPlayers = noPlayers;
         noRounds = rounds;
         this.map = map;

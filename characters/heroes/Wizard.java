@@ -128,6 +128,11 @@ public class Wizard extends Hero {
         dmgDrain *= min(Constants.WIZ_DRAIN_LEVEL * wizard.maxHP, wizard.hp);
         wizard.dmg = round(dmgDrain);
     }
+    /*
+    Verific daca hp este egal cu -1 adica, daca jucatorul este mort
+    pentru cazul in care 2 jucatori se omoara reciproc si avanseaza
+    in nivel, fara sa reinvie
+     */
     @Override
     public final void levelUp() {
         if (hp != -1) {

@@ -79,6 +79,10 @@ public final class Map {
         return false;
     }
 
+    /*
+    Cum jucătorii morți rămân acum pe hartă îi voi căuta
+    pe cei 2 vii
+     */
     public Hero firstFighter(final int row, final int column) {
         int nr = 0;
         for (int i = 0; i < playersMap.get(row).get(column).size(); i++) {

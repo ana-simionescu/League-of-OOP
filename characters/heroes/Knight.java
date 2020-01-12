@@ -34,10 +34,6 @@ public class Knight extends Hero {
         return slam;
     }
 
-    public final float getExecuteHPLimit() {
-        return executeHPLimit;
-    }
-
     public final float getExecute() {
         return execute;
     }
@@ -49,7 +45,6 @@ public class Knight extends Hero {
 
     @Override
     public final void isAffectedBy(final Angel angel) {
-        //System.out.println("*");
         angel.affect(this); }
 
     @Override
@@ -128,6 +123,11 @@ public class Knight extends Hero {
         }
     }
 
+    /*
+    Verific daca hp este egal cu -1 adica, daca jucatorul este mort
+    pentru cazul in care 2 jucatori se omoara reciproc si avanseaza
+    in nivel, fara sa reinvie
+     */
     @Override
     public final void levelUp() {
         if (hp != -1) {

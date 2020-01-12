@@ -140,6 +140,11 @@ public class Rogue extends Hero {
         wizard.overtimeDmg = round(dmgParalysis);
         wizard.movingAbility = false;
     }
+    /*
+    Verific daca hp este egal cu -1 adica, daca jucatorul este mort
+    pentru cazul in care 2 jucatori se omoara reciproc si avanseaza
+    in nivel, fara sa reinvie
+     */
     @Override
     public final void levelUp() {
         if (hp != -1) {

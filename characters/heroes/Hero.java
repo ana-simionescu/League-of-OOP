@@ -138,14 +138,13 @@ public abstract class Hero {
 
    /*
       Dacă hp-ul jucătorului a devenit 0 sau negativ, îl setez la -1
-   pentru a ști că este mort și îl scot de pe hartă.
+   pentru a ști că este mort.
       Această metodă este apelată de fiecare dată când un jucator
    este afectat de dmg instantaneu sau overtime.
     */
    public final void die() {
       if (hp <= 0 || dmg == -1) {
          hp = -1;
-         //map.removePlayerFromMap(row, column, this);
       }
    }
 
@@ -186,7 +185,6 @@ public abstract class Hero {
 
    public abstract void levelUp();
    public abstract void levelUpByAngel();
-  // public abstract void levelUpWithoutHp();
 
    /*
       Metoda primește dmg-ul de bază al abilității și îi aplică modificatorul de teren

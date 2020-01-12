@@ -19,14 +19,6 @@ public abstract class Angel {
         this.column = column;
         type = "-";
     }
-    /*public final String toString() {
-        if (hp == -1) {
-            return type + " dead";
-        } else {
-            return type + " " + level + " " + xp + " " + hp + " " + row + " " + column;
-        }
-    }*/
-
     public final int getColumn() {
         return column;
     }

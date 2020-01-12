@@ -21,11 +21,15 @@ public final class Main {
                 map.getCellType(firstFighter.getRow(), firstFighter.getColumn()));
         firstFighter.isAttackedBy(secondFighter,
                 map.getCellType(firstFighter.getRow(), firstFighter.getColumn()));
-                                /*
-                                Se aplică daunele calculate anterior
-                                 */
+        /*
+         Se aplică daunele calculate anterior
+        */
         secondFighter.sufferDmg();
         firstFighter.sufferDmg();
+        /*
+         Dacă unul dintre jucători îl omoară pe celălalt, este notificat observerul
+         în ordinea indexilor jucătorilor
+         */
         if (firstFighter.getIndex() > secondFighter.getIndex()) {
             if (!firstFighter.isAlive()) {
                 greatWiz.getHeroKilled().update(firstFighter, secondFighter, output);
@@ -41,10 +45,11 @@ public final class Main {
                 greatWiz.getHeroKilled().update(firstFighter, secondFighter, output);
             }
         }
-         /*
-         Dacă unul dintre jucători îl omoară pe celălalt, Xp-ul său crește
-         */
         if (firstFighter.getIndex() > secondFighter.getIndex()) {
+            /*
+            Dacă unul dintre jucători îl omoară pe celălalt, îi crește xp-ul și are
+            posibilitatea să crească în nivel, caz în care observerul este notificat
+             */
             int levelSecond = secondFighter.getLevel();
             if (firstFighter.getHp() == -1) {
                 int level = secondFighter.getLevel();
@@ -112,7 +117,8 @@ public final class Main {
             String currMove = moves.get(k);
             /*
             Parcurg mișcările fiecărei runde si dacă jucătorul e în viață și
-            nu e incapacitat de un dmg Overtime, se mută pe hartă
+            nu e incapacitat de un dmg Overtime, se mută pe hartă, suferă de
+            overtime damage și verifică dacă își pot alege o strategie
              */
             for (int j = 0; j < currMove.length(); j++) {
                 players.get(j).setFought(false);
@@ -126,14 +132,10 @@ public final class Main {
                         players.get(j).sufferOvertimeDmg();
                     }
                 }
-                /*
-                Imediat după efectuarea mutării, toți jucătorii verifică dacă
-                au de suferit de pe urma unui dmg Overtime
-                 */
-                //players.get(j).sufferOvertimeDmg();
             }
             /*
-                Parcurg harta și verific dacă 2 jucători s-au întâlnit
+                Parcurg lista jucătorilor pentru a verifica dacă există
+                mai multi jucători în aceeși locație
              */
             for (int i = 0; i < players.size(); i++) {
                     if (!players.get(i).isAlive()) {
@@ -147,31 +149,41 @@ public final class Main {
                     if (map.checkIfFightTime(row, column)) {
                         Hero firstFighter = map.firstFighter(row, column);
                         Hero secondFighter = map.secondFighter(row, column);
-
+                        /*
+                        Dacă cei doi jucători aflați în aceeași locație nu s-au
+                        luptat deja în runda curentă se vor lupta
+                         */
                         if (firstFighter.isFought() || secondFighter.isFought()) {
                             continue;
                         }
                         firstFighter.setFought(true);
                         secondFighter.setFought(true);
+                         /*
+                        Vreau să calculez atacul lui wizard mereu a 2a oară
+                        pentru a putea calcula dmg-ul dat de adversarul său
+                         */
                         if (firstFighter.getType() == 'W') {
                             fight(secondFighter, firstFighter, map, greatWiz, output);
                         } else {
                             fight(firstFighter, secondFighter, map, greatWiz, output);
                         }
-
-                        /*
-                        Vreau să calculez atacul lui wizard mereu a 2a oară
-                        pentru a putea calcula dmg-ul dat de adversarul său
-                         */
                     }
 
             }
             for (int i = 0; i < angels.get(k).size(); i++) {
                 Angel angel = angels.get(k).get(i);
+                /*
+                Observerul e notificat de apariția unui înger
+                 */
                 greatWiz.getAngelSpawned().update(angel, output);
                 int row = angel.getRow();
                 int column = angel.getColumn();
                 for (int j = 0; j < map.getPlayersOnMap(row, column).size(); j++) {
+                    /*
+                    În funcție de tipul îngerului și de efectul pe care îl aplică,
+                    jucătorii vor fi ajutați sau afectați, iar
+                    observerul va fi notificat
+                     */
                     if (map.getPlayersOnMap(row, column).get(j).isAlive()
                             && angel.getType() != "Spawner") {
                         int level = map.getPlayersOnMap(row, column).get(j).getLevel();
